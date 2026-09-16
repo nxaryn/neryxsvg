@@ -8,6 +8,40 @@ Draw your SVG. Drag things around. Fine-tune coordinates. Export the result as p
 
 No guessing coordinates. No fighting with awkward online editors. Just create and take the code with you.
 
+## Live Version
+
+The latest public version of NeryxSVG is available at:
+
+neryxsvg.web.app
+
+You can use NeryxSVG directly in your browser without installing anything.
+
+## Running Locally
+
+NeryxSVG is also open source and can be pulled from this repository and run locally.
+
+Clone the repository:
+
+```
+git clone https://github.com/YOUR_USERNAME/neryx-svg.git
+```
+
+Open the project directory:
+
+```
+cd neryx-svg
+```
+
+Start a local web server:
+
+```
+python -m http.server
+```
+
+Then open the local address provided by the server in your browser.
+
+This makes it possible to use NeryxSVG locally, modify the source code, experiment with new features, or host your own version.
+
 ## Features
 
 * Interactive SVG canvas
@@ -107,29 +141,32 @@ neryxsvg/
 └── README.md
 ```
 
-## Getting Started
+## Ways to Use NeryxSVG
 
-Clone the repository:
+NeryxSVG can be used in several different ways.
 
-```
-git clone https://github.com/YOUR_USERNAME/neryx-svg.git
-```
+### Use the public web app
 
-Open the project directory:
+Open the live version in your browser and start creating SVGs immediately.
 
-```
-cd neryx-svg
-```
+No installation or setup is required.
 
-Run it through a local web server:
+### Run it locally
 
-```
-python -m http.server
-```
+Clone the repository and run NeryxSVG using a local web server.
 
-Then open the local address shown by the server in your browser.
+This is useful if you want to work offline, modify the application, or develop your own features.
 
-NeryxSVG is designed to run entirely in the browser for its core editing features.
+### Modify and self-host
+
+Because the project is available as source code, you can modify it and host your own version.
+
+This means NeryxSVG can be used as:
+
+* A ready-to-use web application
+* A local development tool
+* A base for your own SVG editor
+* A learning resource for SVG and web development
 
 ## Roadmap
 
