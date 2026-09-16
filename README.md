@@ -194,7 +194,11 @@ If you find a bug, have an idea, or want to contribute, feel free to open an iss
 
 ## License
 
-License information will be added to this repository.
+NeryxSVG is open source and licensed under the MIT License.
+
+You are free to use, modify, distribute, and self-host the project in accordance with the license.
+
+See the [LICENSE](LICENSE) file for the full license text.
 
 ## NeryxSVG
 
