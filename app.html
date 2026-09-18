@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SVG Editor | NeryxSVG</title>
+        <link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+        <meta name="description" content="NeryxSVG is a free browser-based SVG editor for developers. Draw, drag, fine-tune coordinates, edit SVG elements, and export clean SVG code.">
+        <meta name="keywords" content="SVG editor, online SVG editor, free SVG editor, SVG generator, SVG creator, SVG code editor, vector editor, SVG design tool">
+        <meta name="author" content="Noxaryn">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://neryxsvg.web.app/">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="NeryxSVG | Free Online SVG Editor">
+        <meta property="og:description" content="Draw SVGs visually, fine-tune them with precise coordinates, and export the code.">
+        <meta property="og:url" content="https://neryxsvg.web.app/">
+        <meta property="og:site_name" content="NeryxSVG">
+        <meta property="og:image" content="https://neryxsvg.web.app/assets/og-image.png">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="NeryxSVG | Free Online SVG Editor">
+        <meta name="twitter:description" content="A free browser-based SVG editor built for developers.">
+        <meta name="twitter:image" content="https://neryxsvg.web.app/assets/og-image.png">
+        <link rel="stylesheet" href="/styles/app.css">
+    </head>
+    <body>
+        <div id="app">
+            <div id="topbar">
+                <div class="brand">NeryxSVG<small>SVG editor</small></div>
+                <div class="topgroup">
+                    <button id="btnNew" title="New document">New</button>
+                    <button id="btnImport" title="Import SVG file">Import</button>
+                    <button id="btnExport" title="Export SVG file">Export</button>
+                </div>
+                <div class="topgroup">
+                    <button id="btnUndo" class="icon-btn" title="Undo (Ctrl+Z)">↶</button>
+                    <button id="btnRedo" class="icon-btn" title="Redo (Ctrl+Shift+Z)">↷</button>
+                </div>
+                <div class="topgroup">
+                    <button id="btnZoomOut" class="icon-btn" title="Zoom out">−</button>
+                    <input id="zoomPct" type="text" value="100%">
+                    <button id="btnZoomIn" class="icon-btn" title="Zoom in">+</button>
+                    <button id="btnZoomFit" title="Fit content">Fit</button>
+                    <button id="btnZoom100" title="100%">1:1</button>
+                </div>
+                <div class="topgroup">
+                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkGrid" checked> Grid</label>
+                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkSnap" checked> Snap</label>
+                    <label style="display:flex;align-items:center;gap:5px;">Spacing <input id="gridSizeInput" type="number" value="10" min="1" style="width:50px;"></label>
+                </div>
+                <div class="topgroup" style="margin-left:auto;">
+                    <button id="btnDuplicate" title="Duplicate (Ctrl+D)">Duplicate</button>
+                    <button id="btnDelete" title="Delete (Del)">Delete</button>
+                </div>
+            </div>
+        <div id="body">
+            <div id="toolbar"></div>
+                <div id="canvasWrap">
+                    <div id="cornerBox"></div>
+                    <canvas id="rulerTop"></canvas>
+                    <canvas id="rulerLeft"></canvas>
+                    <div id="canvasScroll">
+                        <svg id="svgRoot" xmlns="http://www.w3.org/2000/svg">
+                            <defs></defs>
+                            <g id="gridLayer"></g>
+                            <g id="elementsLayer"></g>
+                            <g id="overlayLayer"></g>
+                        </svg>
+                        <div id="pathHint">
+                            <span>Next segment:</span>
+                            <select id="pathSegType">
+                                <option value="L">Line</option>
+                                <option value="H">Horizontal</option>
+                                <option value="V">Vertical</option>
+                                <option value="C">Cubic Bézier</option>
+                                <option value="Q">Quadratic Bézier</option>
+                                <option value="S">Smooth Cubic</option>
+                            </select>
+                            <button id="btnClosePath">Close</button>
+                            <button id="btnFinishPath">Finish</button>
+                            <span style="color:var(--text-dimmer);">Esc to cancel</span>
+                        </div>
+                    </div>
+                <div id="coordReadout"><span>X</span>0 <span>Y</span>0</div>
+            </div>
+            <div id="rightPanel">
+                <div id="layersSection">
+                    <div class="panel-head"><span>Layers</span><span class="hint" id="layerCount">0</span></div>
+                    <div id="layersList"></div>
+                </div>
+                <div id="inspectorSection">
+                    <div class="panel-head"><span>Inspector</span><span class="hint" id="inspTypeLabel"></span></div>
+                    <div id="inspectorBody"></div>
+                </div>
+            </div>
+        </div>
+        <div id="bottomPanel">
+            <div id="codeTabHeader">
+                <span class="chev">▾</span>
+                <span class="title">SVG Source</span>
+                <span class="spacer"></span>
+                <button id="btnCopySvg">Copy</button>
+            </div>
+            <div id="codeEditorWrap">
+                <pre id="codeHighlight"><code></code></pre>
+                <textarea id="codeText" spellcheck="false"></textarea>
+            </div>
+        </div>
+        </div>
+        <input type="file" id="fileInput" class="hidden-file-input" accept=".svg,image/svg+xml">
+        <div class="toast" id="toast"></div>
+        <script src="/js/app.js"></script>
+    </body>
+</html>
