@@ -29,7 +29,7 @@ git clone https://github.com/nxaryn/neryxsvg.git
 Open the project directory:
 
 ```
-cd neryx-svg
+cd neryxsvg
 ```
 
 Start a local web server:
