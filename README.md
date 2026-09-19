@@ -12,7 +12,7 @@ No guessing coordinates. No fighting with awkward online editors. Just create an
 
 The latest public version of NeryxSVG is available at:
 
-[neryxsvg.web.app](neryxsvg.web.app)
+[https://neryxsvg.web.app](https://neryxsvg.web.app)
 
 You can use NeryxSVG directly in your browser without installing anything.
 
