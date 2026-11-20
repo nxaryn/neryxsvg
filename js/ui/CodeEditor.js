@@ -410,8 +410,16 @@ function doExport(format){
 
 document.getElementById('btnExport').addEventListener('click', (e)=>{
   e.stopPropagation();
+  const btn = document.getElementById('btnExport');
   const menu = document.getElementById('exportMenu');
-  menu.classList.toggle('show');
+  const show = !menu.classList.contains('show');
+  document.querySelectorAll('.dropdown-menu.show').forEach(m=>m.classList.remove('show'));
+  if(show){
+    const rect = btn.getBoundingClientRect();
+    menu.style.left = rect.left + 'px';
+    menu.style.top = (rect.top + rect.height + 6) + 'px';
+    menu.classList.add('show');
+  }
 });
 document.getElementById('exportMenuSvg').addEventListener('click', (e)=>{
   e.stopPropagation();

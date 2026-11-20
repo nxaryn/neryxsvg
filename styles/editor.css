@@ -30,7 +30,6 @@
   color-scheme: dark;
 }
 
-/* Editor Themes */
 body.theme-light{
   --bg: #f5f7f9;
   --panel: #ffffff;
@@ -67,33 +66,6 @@ body.theme-midnight{
   color-scheme: dark;
 }
 
-/* Canvas Backgrounds */
-#canvasScroll.bg-transparent{
-  background:
-    linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
-    linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
-    var(--bg);
-}
-#canvasScroll.bg-white{ background: #ffffff; }
-#canvasScroll.bg-black{ background: #000000; }
-#canvasScroll.bg-grey{ background: #e5e7eb; }
-
-/* Grid overlays */
-#canvasScroll.grid-dots{
-  background-image:
-    radial-gradient(var(--text-dimmer) 0.5px, transparent 0.5px),
-    var(--canvas-bg-color);
-  background-size: 20px 20px;
-}
-#canvasScroll.grid-squares{
-  background-image:
-    linear-gradient(var(--text-dimmer) 1px, transparent 1px),
-    linear-gradient(90deg, var(--text-dimmer) 1px, transparent 1px),
-    var(--canvas-bg-color);
-  background-size: 20px 20px;
-}
-#canvasScroll.grid-none{ background-image: none; }
-
 html, body{
   height: 100%;
   margin: 0;
@@ -118,12 +90,16 @@ button:focus-visible{ outline-offset: 2px; }
   *{ transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
 }
 
-
 #app{
   height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  user-select: none;
+}
+
+#app input, #app textarea, #app select{
+  user-select: auto;
 }
 
 #body{
@@ -131,8 +107,6 @@ button:focus-visible{ outline-offset: 2px; }
   display: flex;
   min-height: 0;
 }
-
-
 
 #topbar{
   flex: 0 0 var(--topbar-h);
@@ -209,8 +183,6 @@ button:focus-visible{ outline-offset: 2px; }
   padding: 3px 5px;
 }
 
-
-
 #toolbar{
   flex: 0 0 var(--toolbar-w);
   background: var(--panel);
@@ -238,8 +210,6 @@ button:focus-visible{ outline-offset: 2px; }
 #toolbar button svg{ width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 #toolbar button:hover{ background: var(--panel-2); color: var(--text); }
 #toolbar button.active{ background: var(--accent-dim); color: var(--accent-strong); border-color: var(--accent-dim); }
-
-
 
 #canvasWrap{
   position: relative;
@@ -345,8 +315,6 @@ button:focus-visible{ outline-offset: 2px; }
 }
 #pathHint button:hover{ background: var(--accent-dim); border-color: var(--accent-dim); color: var(--accent-strong); }
 
-
-
 #rightPanel{
   flex: 0 0 var(--rightpanel-w);
   display: flex;
@@ -370,7 +338,6 @@ button:focus-visible{ outline-offset: 2px; }
   border-bottom: 1px solid var(--border-soft);
 }
 .panel-head .hint{ font-weight: 400; font-size: 11px; color: var(--text-dimmer); font-family: var(--mono); }
-
 
 #layersList{ flex: 1 1 auto; overflow-y: auto; padding: 4px 0; }
 
@@ -429,7 +396,6 @@ button:focus-visible{ outline-offset: 2px; }
   font-size: 12px;
   line-height: 1.6;
 }
-
 
 #inspectorBody{ flex: 1 1 auto; padding: 4px 12px 16px; }
 
@@ -544,7 +510,6 @@ button:focus-visible{ outline-offset: 2px; }
 .smooth-node:hover, .insert-after:hover, .addcmd:hover{ border-color: var(--accent-dim); color: var(--accent-strong); }
 .del:hover{ color: var(--danger); border-color: var(--danger-dim); }
 
-
 #bottomPanel{
   flex: 0 0 var(--bottompanel-h);
   display: flex;
@@ -621,8 +586,6 @@ button:focus-visible{ outline-offset: 2px; }
 .tok-str{ color: #9fd67b; }
 .tok-punc{ color: var(--text-dimmer); }
 
-
-
 .toast{
   position: fixed;
   left: 50%;
@@ -642,9 +605,7 @@ button:focus-visible{ outline-offset: 2px; }
 }
 .toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
 
-
 .hidden-file-input{ display: none; }
-
 
 *{ scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 *::-webkit-scrollbar{ width: 10px; height: 10px; }
@@ -707,15 +668,13 @@ button:focus-visible{ outline-offset: 2px; }
 .dropdown:hover{ background: var(--panel); border-color: var(--border-soft); }
 .dropdown .chev{ font-size: 10px; }
 .dropdown-menu{
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
   min-width: 140px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  z-index: 100;
+  z-index: 1000;
   display: none;
   padding: 4px 0;
 }
