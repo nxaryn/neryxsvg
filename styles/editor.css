@@ -65,7 +65,27 @@ hr{border:none;border-top:1px solid var(--border-soft);margin:8px 0;}
 ::-webkit-scrollbar-thumb{background:#252b33;border-radius:5px;border:2px solid var(--bg);}
 ::-webkit-scrollbar-thumb:hover{background:#323a44;}
 
-#app{display:flex;flex-direction:column;height:100vh;}
+#app{display:flex;flex-direction:column;height:100vh;flex-shrink:0;}
+
+.editor-description {
+    padding: 16px 24px;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    line-height: 1.6;
+}
+
+.editor-description h2 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.editor-description p {
+    max-width: 850px;
+    margin: 0;
+    font-size: 12px;
+}
 
 #topbar{
     display:flex;align-items:center;gap:10px;
