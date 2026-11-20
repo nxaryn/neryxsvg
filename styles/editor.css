@@ -493,7 +493,7 @@ button:focus-visible{ outline-offset: 2px; }
   font-size: 12px;
   line-height: 1.6;
 }
-#codeHighlight, #codeText{
+#codeHighlight{
   position: absolute; inset: 0;
   margin: 0;
   padding: 10px 14px;
@@ -501,15 +501,29 @@ button:focus-visible{ outline-offset: 2px; }
   white-space: pre;
   font-family: inherit; font-size: inherit; line-height: inherit;
   border: none;
+  pointer-events: none;
+  color: var(--text);
+  background: transparent;
+  z-index: 1;
 }
-#codeHighlight{ pointer-events: none; color: var(--text); background: transparent; }
 #codeText{
+  position: absolute; inset: 0;
+  margin: 0;
+  padding: 10px 14px;
+  overflow: auto;
+  white-space: pre;
+  font-family: inherit; font-size: inherit; line-height: inherit;
+  border: none;
   background: transparent;
   color: transparent;
   caret-color: var(--text);
   resize: none;
+  z-index: 2;
 }
-#codeText::selection{ background: rgba(79,209,197,0.25); }
+#codeText::selection{
+  background: rgba(79,209,197,0.25);
+  color: var(--text);
+}
 
 .tok-tag{ color: var(--accent-strong); }
 .tok-attr{ color: var(--warn); }

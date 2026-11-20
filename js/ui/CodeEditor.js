@@ -40,9 +40,10 @@ export function syncCodePanel(){
   codeHighlight.innerHTML = highlightXML(src);
 }
 
+const codeHighlightPre = document.getElementById('codeHighlight');
 codeText.addEventListener('scroll', ()=>{
-  codeHighlight.parentElement.scrollTop = codeText.scrollTop;
-  codeHighlight.parentElement.scrollLeft = codeText.scrollLeft;
+  codeHighlightPre.scrollTop = codeText.scrollTop;
+  codeHighlightPre.scrollLeft = codeText.scrollLeft;
 });
 codeText.addEventListener('focus', ()=>{ codeEditingByUser = true; });
 codeText.addEventListener('input', ()=>{ codeHighlight.innerHTML = highlightXML(codeText.value); });
