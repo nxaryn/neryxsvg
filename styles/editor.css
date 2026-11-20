@@ -784,3 +784,11 @@ button:focus-visible{ outline-offset: 2px; }
   color: var(--text-dim);
 }
 .description-popup-checkbox input{ margin: 0; }
+
+/* Disable native text selection across editor UI */
+#app{
+  user-select: none;
+}
+#app input, #app textarea, #app select{
+  user-select: auto;
+}
