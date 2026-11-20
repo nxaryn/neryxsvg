@@ -1,7 +1,7 @@
 import { state } from '../app/State.js';
 import { Matrix } from '../utils/Matrix.js';
 import { uid } from '../utils/ids.js';
-import { createElement, createGroup, shapeLocalBounds } from '../document/Element.js';
+import { createElement, createGroup, shapeLocalBounds, getElement } from '../document/Element.js';
 import { createDocument } from '../document/Document.js';
 import { serializeSVG, computeContentBounds } from '../svg/Serializer.js';
 import { parseDToCommands } from '../svg/PathParser.js';
@@ -350,9 +350,51 @@ document.getElementById('fileInput').addEventListener('change', (e)=>{
   e.target.value = '';
 });
 
+function getExportElements(){
+  const chk = document.getElementById('chkExportSelection');
+  if(chk && chk.checked){
+    const sel = state.selection.map(id=>getElement(doc(), id)).filter(Boolean);
+    if(sel.length === 0){
+      toast('No elements selected');
+      return null;
+    }
+    return sel;
+  }
+  return doc().elements.filter(e=>!e.parentId);
+}
+
+function exportPng(elements){
+  const src = serializeSVG(doc(), elements);
+  const svgBlob = new Blob([src], {type:'image/svg+xml;charset=utf-8'});
+  const url = URL.createObjectURL(svgBlob);
+  const img = new Image();
+  img.onload = ()=>{
+    const w = img.width || 800;
+    const h = img.height || 600;
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    const pngUrl = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = pngUrl; a.download = 'drawing.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(pngUrl);
+    URL.revokeObjectURL(url);
+    toast('PNG exported');
+  };
+  img.onerror = ()=>{
+    URL.revokeObjectURL(url);
+    toast('PNG export failed');
+  };
+  img.src = url;
+}
+
 document.getElementById('btnExport').addEventListener('click', ()=>{
-  const topLevel = doc().elements.filter(e=>!e.parentId);
-  const src = serializeSVG(doc(), topLevel);
+  const elements = getExportElements();
+  if(!elements) return;
+  const src = serializeSVG(doc(), elements);
   const blob = new Blob([src], {type:'image/svg+xml'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -360,4 +402,10 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
   toast('SVG exported');
+});
+
+document.getElementById('btnExportPng').addEventListener('click', ()=>{
+  const elements = getExportElements();
+  if(!elements) return;
+  exportPng(elements);
 });
