@@ -1,0 +1,34 @@
+name: Test
+
+# v0.95: "stand up an automated test suite ... and wire it into CI" — the
+# suite itself (test/*.mjs, run via `npm test`) already existed as of the
+# v0.9/early-v0.95 work; this workflow is what actually makes it CI rather
+# than a script someone has to remember to run by hand.
+#
+# Scope, honestly: this runs the Node/jsdom suite (test/boot.mjs,
+# project-roundtrip.mjs, sanitizer.mjs, text-styling.mjs,
+# accessibility.mjs) on every push/PR — real regression coverage for the
+# document model, persistence, the sanitizer, and DOM-level wiring. It is
+# NOT real-browser testing (jsdom is not Chromium/Firefox/Safari) and does
+# NOT run test/performance.mjs (a measurement script with no pass/fail
+# gate, deliberately excluded from `npm test` — see that file's own header
+# comment). Cross-browser CI (e.g. Playwright across engines) is still
+# open v0.95 scope, not something this workflow claims to cover.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm test

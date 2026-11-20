@@ -1,0 +1,973 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NeryxSVG Documentation | Noxaryn</title>
+
+    <meta name="description" content="NeryxSVG documentation. Learn how to use NeryxSVG, create and edit SVG graphics, work with the editor, export SVG code, and run the project locally.">
+    <meta name="author" content="Noxaryn">
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="https://neryxsvg.web.app/docs/">
+    <link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NeryxSVG Documentation">
+    <meta property="og:description" content="Documentation for NeryxSVG, a free browser-based SVG editor for developers.">
+    <meta property="og:url" content="https://neryxsvg.web.app/docs/">
+    <meta property="og:site_name" content="NeryxSVG">
+    <meta property="og:image" content="https://neryxsvg.web.app/assets/og-image.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NeryxSVG Documentation">
+    <meta name="twitter:description" content="Documentation for NeryxSVG, a browser-based SVG editor built for developers.">
+    <meta name="twitter:image" content="https://neryxsvg.web.app/assets/og-image.png">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "name": "NeryxSVG Documentation",
+        "description": "Documentation for NeryxSVG, a free browser-based SVG editor for developers.",
+        "url": "https://neryxsvg.web.app/docs/",
+        "isPartOf": {
+            "@type": "SoftwareApplication",
+            "name": "NeryxSVG",
+            "url": "https://neryxsvg.web.app/"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Noxaryn"
+        }
+    }
+    </script>
+
+    <link rel="stylesheet" href="/styles/docs.css">
+</head>
+
+<body>
+    <main>
+        <div class="grid-bg" aria-hidden="true"></div>
+
+        <div class="social-bar">
+            <div class="social-bar-inner">
+                <a href="https://instagram.com/n0xaryn" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="/assets/svg/instagram.svg" alt="Instagram Logo"></a>
+                <a href="https://discord.gg/NTdnAcGfRq" target="_blank" rel="noopener noreferrer" aria-label="Discord"><img src="/assets/svg/discord.svg" alt="Discord Logo"></a>
+                <a href="https://github.com/nxaryn" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><img src="/assets/svg/github.svg" alt="GitHub Logo"></a>
+                <a href="https://x.com/nxaryn" target="_blank" rel="noopener noreferrer" aria-label="X/Twitter"><img src="/assets/images/x.png" alt="X Logo"></a>
+                <a href="https://www.youtube.com/channel/UCGdge0kX9NnIxa6tPQ8w97g" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="/assets/svg/youtube.svg" alt="YouTube Logo"></a>
+            </div>
+        </div>
+
+        <div class="doc">
+
+            <nav class="doc-nav" aria-label="Main navigation">
+                <div class="wrap nav-inner">
+
+                    <a class="brand" href="/" aria-label="NeryxSVG home">
+                        <span>NeryxSVG</span>
+                        <small>v0.4</small>
+                    </a>
+
+                    <div class="doc-nav-links">
+                        <a href="/docs/">Documentation</a>
+                    </div>
+
+                    <div class="doc-nav-right">
+                        <a
+                            class="btn btn-ghost btn-small"
+                            href="https://github.com/nxaryn/neryxsvg"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            GitHub
+                        </a>
+
+                        <a class="btn btn-primary btn-small" href="/editor">
+                            Open editor
+                            <span aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+
+                </div>
+            </nav>
+
+
+            
+
+            <section class="section" id="hero">
+                <div class="doc-hero">
+
+                    <p class="section-eyebrow">NERYXSVG DOCUMENTATION</p>
+
+                    <h1 class="doc-hero-title">
+                        Documentation to NeryxSVG
+                    </h1>
+
+                    <p class="doc-hero-subtitle">
+                        Everything you need to understand, use, modify,
+                        and run NeryxSVG.
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG is a browser-based SVG editor built for
+                        developers who want the convenience of visual
+                        editing without losing control over the SVG code
+                        underneath.
+                    </p>
+
+                    <div class="doc-hero-actions">
+                        <a class="btn btn-primary" href="/editor">
+                            Open NeryxSVG
+                            <span aria-hidden="true">↗</span>
+                        </a>
+
+                        <a
+                            class="btn btn-ghost"
+                            href="https://github.com/nxaryn/neryxsvg"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View source
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="about">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">01 / ABOUT</p>
+
+                    <h2 class="section-title">
+                        What is NeryxSVG?
+                    </h2>
+
+                    <p class="section-subtitle">
+                        SVG editing without hiding the SVG.
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG is a free browser-based SVG editor
+                        designed around a simple idea:
+                    </p>
+
+                    <div class="doc-callout">
+                        <strong>Draw → Drag → Fine-tune → Export</strong>
+                    </div>
+
+                    <p class="section-p">
+                        You can create SVG elements visually, move them
+                        around the canvas, adjust their properties
+                        numerically, and export the resulting SVG code.
+                    </p>
+
+                    <p class="section-p">
+                        Instead of manually guessing coordinates and
+                        repeatedly editing SVG source code, NeryxSVG lets
+                        you create the graphic visually first and then
+                        fine-tune the exact values when precision matters.
+                    </p>
+
+                    <p class="section-p">
+                        The goal is not to replace SVG code. The goal is
+                        to make creating that code easier.
+                    </p>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="why">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">02 / WHY NERYXSVG</p>
+
+                    <h2 class="section-title">
+                        Built between visual editing and code
+                    </h2>
+
+                    <p class="section-subtitle">
+                        A developer-focused approach to SVG creation.
+                    </p>
+
+                    <p class="section-p">
+                        SVG is powerful, but manually building graphics
+                        can become frustrating as the number of elements,
+                        coordinates, paths, and dimensions increases.
+                    </p>
+
+                    <p class="section-p">
+                        Traditional visual editors make positioning easy,
+                        while writing SVG manually provides direct access
+                        to the source. NeryxSVG is designed to sit between
+                        those two workflows.
+                    </p>
+
+                    <div class="doc-grid">
+
+                        <article class="doc-card">
+                            <h3>Visual</h3>
+                            <p>
+                                Create and move elements directly on the
+                                SVG canvas instead of manually calculating
+                                every coordinate.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Precise</h3>
+                            <p>
+                                Switch from dragging to numerical controls
+                                whenever exact positioning or dimensions
+                                are required.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Portable</h3>
+                            <p>
+                                Export your work as normal SVG code that
+                                can be used in other projects.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Developer-focused</h3>
+                            <p>
+                                NeryxSVG does not require a proprietary
+                                format for the final SVG output.
+                            </p>
+                        </article>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="features">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">03 / FEATURES</p>
+
+                    <h2 class="section-title">
+                        Features
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Tools for creating, positioning, and exporting SVG graphics.
+                    </p>
+
+                    <div class="doc-grid">
+
+                        <article class="doc-card">
+                            <h3>SVG canvas</h3>
+                            <p>
+                                Work directly on an interactive SVG canvas
+                                with a Cartesian-style coordinate grid.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Shape tools</h3>
+                            <p>
+                                Create rectangles, circles, ellipses,
+                                lines, polygons, and polylines.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Path and text tools</h3>
+                            <p>
+                                Work with SVG paths and text elements
+                                alongside basic geometric shapes.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Drag and position</h3>
+                            <p>
+                                Move SVG elements around the canvas and
+                                fine-tune their positions using numerical
+                                controls.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Grid and snapping</h3>
+                            <p>
+                                Use the coordinate grid and snapping tools
+                                to make positioning easier.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Zoom and pan</h3>
+                            <p>
+                                Move around the canvas and zoom into areas
+                                where more precise editing is required.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Layers</h3>
+                            <p>
+                                Manage individual SVG elements through
+                                element and layer management.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Live SVG code</h3>
+                            <p>
+                                See the SVG source generated from the
+                                elements in your project.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Export</h3>
+                            <p>
+                                Export your work as SVG code and copy the
+                                generated SVG directly to your clipboard.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>History</h3>
+                            <p>
+                                Undo and redo changes while working on
+                                your SVG.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Keyboard shortcuts</h3>
+                            <p>
+                                Use keyboard controls to speed up common
+                                editing operations.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Developer interface</h3>
+                            <p>
+                                A dark interface designed around a
+                                developer-oriented workflow.
+                            </p>
+                        </article>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="key-uses">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">04 / KEY USES</p>
+
+                    <h2 class="section-title">
+                        What can you use NeryxSVG for?
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Create SVG assets that can move directly into other projects.
+                    </p>
+
+                    <div class="doc-grid">
+
+                        <article class="doc-card">
+                            <h3>Websites</h3>
+                            <p>
+                                Create icons, diagrams, decorative graphics,
+                                logos, and other SVG assets for websites.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Web applications</h3>
+                            <p>
+                                Build graphics and interface assets that
+                                can be included directly in web applications.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Game interfaces</h3>
+                            <p>
+                                Create interface graphics, icons, symbols,
+                                and other SVG-compatible game assets.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Documentation</h3>
+                            <p>
+                                Create diagrams and technical graphics for
+                                documentation and developer projects.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Icons</h3>
+                            <p>
+                                Create simple vector icons while retaining
+                                control over the underlying SVG elements.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Learning</h3>
+                            <p>
+                                Use NeryxSVG to experiment with SVG
+                                coordinates, shapes, paths, and structure.
+                            </p>
+                        </article>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="workflow">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">05 / WORKFLOW</p>
+
+                    <h2 class="section-title">
+                        The NeryxSVG workflow
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Start visually, then switch to precision when you need it.
+                    </p>
+
+                    <div class="doc-steps">
+
+                        <article class="doc-step">
+                            <span class="doc-step-number">01</span>
+
+                            <div>
+                                <h3>Draw</h3>
+                                <p>
+                                    Select a tool and create an SVG
+                                    element on the canvas.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="doc-step">
+                            <span class="doc-step-number">02</span>
+
+                            <div>
+                                <h3>Drag</h3>
+                                <p>
+                                    Move the element around the canvas
+                                    until it is roughly where you want it.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="doc-step">
+                            <span class="doc-step-number">03</span>
+
+                            <div>
+                                <h3>Fine-tune</h3>
+                                <p>
+                                    Use numerical controls to set exact
+                                    coordinates, dimensions, and other
+                                    available properties.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="doc-step">
+                            <span class="doc-step-number">04</span>
+
+                            <div>
+                                <h3>Export</h3>
+                                <p>
+                                    Copy or export the generated SVG code
+                                    and use it in another project.
+                                </p>
+                            </div>
+                        </article>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="example">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">06 / EXAMPLE</p>
+
+                    <h2 class="section-title">
+                        From canvas to SVG code
+                    </h2>
+
+                    <p class="section-subtitle">
+                        You do not need to calculate every coordinate by hand.
+                    </p>
+
+                    <p class="section-p">
+                        Suppose you want to create a circle positioned at
+                        X 250 and Y 150 with a radius of 50.
+                    </p>
+
+                    <div class="doc-code">
+                        <pre><code>&lt;circle cx="250" cy="150" r="50" /&gt;</code></pre>
+                    </div>
+
+                    <p class="section-p">
+                        Instead of manually writing those values first,
+                        create the circle on the canvas, drag it into
+                        position, and then fine-tune its values.
+                    </p>
+
+                    <div class="doc-code">
+                        <pre><code>X:       250
+
+
+Y:       150
+Radius:   50</code></pre> </div>
+
+
+                    <p class="section-p">
+                        NeryxSVG handles the connection between the visual
+                        element and the SVG source.
+                    </p>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="developers">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">07 / FOR DEVELOPERS</p>
+
+                    <h2 class="section-title">
+                        Built for developers
+                    </h2>
+
+                    <p class="section-subtitle">
+                        The code is part of the workflow, not something hidden away.
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG is designed for people who already work
+                        with code and want a faster way to create SVG
+                        graphics.
+                    </p>
+
+                    <p class="section-p">
+                        The final output is normal SVG. You can take the
+                        generated code and place it into a website, web
+                        application, game interface, documentation page,
+                        icon system, or another SVG-compatible project.
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG does not require you to keep your work
+                        inside a proprietary project format just to use
+                        the result.
+                    </p>
+
+                    <h3 class="doc-heading">
+                        Project structure
+                    </h3>
+
+                    <div class="doc-code">
+                        <pre><code>neryxsvg/
+        ├── index.html
+        ├── css/
+        ├── js/
+        ├── assets/
+        └── README.md</code></pre>
+                    </div>
+
+                    <p class="section-p">
+                        The project is intentionally lightweight and built
+                        as a web application.
+                    </p>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="local">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">08 / RUNNING LOCALLY</p>
+
+                    <h2 class="section-title">
+                        Run NeryxSVG locally
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Clone the source and run it from your own machine.
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG can be downloaded from the public
+                        repository and run locally without a special
+                        application or build system.
+                    </p>
+
+                    <h3 class="doc-heading">
+                        1. Clone the repository
+                    </h3>
+
+                    <div class="doc-code">
+                        <pre><code>git clone https://github.com/nxaryn/neryxsvg.git</code></pre>
+                    </div>
+
+                    <h3 class="doc-heading">
+                        2. Enter the project directory
+                    </h3>
+
+                    <div class="doc-code">
+                        <pre><code>cd neryxsvg</code></pre>
+                    </div>
+
+                    <h3 class="doc-heading">
+                        3. Start a local web server
+                    </h3>
+
+                    <div class="doc-code">
+                        <pre><code>python -m http.server</code></pre>
+                    </div>
+
+                    <p class="section-p">
+                        Open the local address provided by the server in
+                        your browser.
+                    </p>
+
+                    <p class="section-p">
+                        Running the project locally makes it possible to
+                        experiment with the source, develop new features,
+                        work offline, or create your own hosted version.
+                    </p>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="open-source">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">09 / OPEN SOURCE</p>
+
+                    <h2 class="section-title">
+                        Open source
+                    </h2>
+
+                    <p class="section-subtitle">
+                        NeryxSVG is source-available under the MIT License.
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG is an independent open-source project.
+                        The source code is available publicly on GitHub,
+                        allowing developers to inspect the project,
+                        modify it, experiment with it, and host their own
+                        version.
+                    </p>
+
+                    <div class="doc-grid">
+
+                        <article class="doc-card">
+                            <h3>Use</h3>
+                            <p>
+                                Use NeryxSVG as a ready-to-use browser
+                                application.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Modify</h3>
+                            <p>
+                                Change the source code and experiment with
+                                your own features and ideas.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Self-host</h3>
+                            <p>
+                                Run and host your own version of the
+                                application.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Learn</h3>
+                            <p>
+                                Use the source as a practical reference
+                                for SVG and web development.
+                            </p>
+                        </article>
+
+                    </div>
+
+                    <div class="doc-actions">
+                        <a
+                            class="btn btn-ghost"
+                            href="https://github.com/nxaryn/neryxsvg"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View repository
+                            <span aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="contributing">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">10 / CONTRIBUTING</p>
+
+                    <h2 class="section-title">
+                        Contributing
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Found a bug or have an idea?
+                    </p>
+
+                    <p class="section-p">
+                        NeryxSVG is an independent project and contributions
+                        are welcome.
+                    </p>
+
+                    <p class="section-p">
+                        If you find a bug, have an idea for a feature, or
+                        want to improve the project, you can open an issue
+                        or submit a pull request through GitHub.
+                    </p>
+
+                    <div class="doc-actions">
+                        <a
+                            class="btn btn-primary"
+                            href="https://github.com/nxaryn/neryxsvg/issues"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Open an issue
+                            <span aria-hidden="true">↗</span>
+                        </a>
+
+                        <a
+                            class="btn btn-ghost"
+                            href="https://github.com/nxaryn/neryxsvg"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            GitHub repository
+                            <span aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="roadmap">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">11 / ROADMAP</p>
+
+                    <h2 class="section-title">
+                        What's next?
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Planned improvements for future versions.
+                    </p>
+
+                    <div class="doc-grid">
+
+                        <article class="doc-card">
+                            <h3>Path editing</h3>
+                            <p>
+                                More advanced path editing and Bézier curve
+                                controls.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Selection</h3>
+                            <p>
+                                Better multi-selection and more flexible
+                                element manipulation.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Alignment</h3>
+                            <p>
+                                Alignment and distribution tools for
+                                arranging elements.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Transforms</h3>
+                            <p>
+                                Rotation and transform controls for SVG
+                                elements.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>SVG import</h3>
+                            <p>
+                                Import existing SVG files into the editor.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Source editing</h3>
+                            <p>
+                                Improved direct editing of SVG source code.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Canvas controls</h3>
+                            <p>
+                                Custom canvas sizes and viewBox editing.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Projects</h3>
+                            <p>
+                                Project saving and more advanced project
+                                management.
+                            </p>
+                        </article>
+
+                        <article class="doc-card">
+                            <h3>Mobile</h3>
+                            <p>
+                                Improved support for smaller screens and
+                                mobile devices.
+                            </p>
+                        </article>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="license">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">12 / LICENSE</p>
+
+                    <h2 class="section-title">
+                        MIT License
+                    </h2>
+
+                    <p class="section-subtitle">
+                        NeryxSVG is released under the MIT License.
+                    </p>
+
+                    <p class="section-p">
+                        You are free to use, modify, distribute, and
+                        self-host NeryxSVG in accordance with the terms
+                        of the license.
+                    </p>
+
+                    <p class="section-p">
+                        See the LICENSE file in the repository for the
+                        complete license text.
+                    </p>
+
+                </div>
+            </section>
+
+
+            
+
+            <section class="section" id="start">
+                <div class="section-inner">
+
+                    <p class="section-eyebrow">NERYXSVG</p>
+
+                    <h2 class="section-title">
+                        SVG that is YOURS.
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Start creating, or get the source and build it yourself.
+                    </p>
+
+                    <div class="doc-actions">
+
+                        <a class="btn btn-primary" href="/editor">
+                            Open editor
+                            <span aria-hidden="true">↗</span>
+                        </a>
+
+                        <a
+                            class="btn btn-ghost"
+                            href="https://github.com/nxaryn/neryxsvg"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View source
+                            <span aria-hidden="true">↗</span>
+                        </a>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+</body>
+</html>

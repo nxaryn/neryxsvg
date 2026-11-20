@@ -1,0 +1,10 @@
+export const svgRoot = document.getElementById('svgRoot');
+export const defsLayer = svgRoot.querySelector('defs');
+export const elementsLayer = document.getElementById('elementsLayer');
+export const overlayLayer = document.getElementById('overlayLayer');
+export const gridLayer = document.getElementById('gridLayer');
+export const canvasScroll = document.getElementById('canvasScroll');
+export const rulerTop = document.getElementById('rulerTop');
+export const rulerLeft = document.getElementById('rulerLeft');
+export const coordReadout = document.getElementById('coordReadout');
+export const pathHint = document.getElementById('pathHint');

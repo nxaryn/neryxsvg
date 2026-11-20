@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NeryxSVG — Free Online SVG Editor for Developers.</title>
+        <meta name="description" content="NeryxSVG is a free browser-based SVG editor for developers. Draw visually, drag elements into place, fine-tune coordinates, edit SVG code, and export clean SVG.">
+        <meta name="author" content="Noxaryn">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://neryxsvg.web.app/">
+        <link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="NeryxSVG — SVG that is YOURS.">
+        <meta property="og:description" content="Draw SVGs visually. Fine-tune them numerically. Edit the code. Export the result.">
+        <meta property="og:url" content="https://neryxsvg.web.app/">
+        <meta property="og:site_name" content="NeryxSVG">
+        <meta property="og:image" content="https://neryxsvg.web.app/assets/og-image.png">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="NeryxSVG — SVG that is YOURS.">
+        <meta name="twitter:description" content="A lightweight SVG editor built for developers who want visual control without losing the code.">
+        <meta name="twitter:image" content="https://neryxsvg.web.app/assets/og-image.png">
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "NeryxSVG",
+            "applicationCategory": "DesignApplication",
+            "applicationSubCategory": "SVG Editor",
+            "operatingSystem": "Any",
+            "isAccessibleForFree": true,
+            "description": "A free browser-based SVG editor for developers. Draw visually, edit SVG code, fine-tune coordinates, and export clean SVG files.",
+            "url": "https://neryxsvg.web.app/",
+            "author": {
+                "@type": "Organization",
+                "name": "Noxaryn"
+            },
+            "featureList": [
+                "Visual SVG editing",
+                "Native SVG elements",
+                "Coordinate-based editing",
+                "Bézier path editing",
+                "SVG source code editing",
+                "SVG export"
+            ]
+        }
+        </script>
+        <link rel="stylesheet" href="/styles/home.css">
+    </head>
+    <body>
+        <div class="grid-bg" aria-hidden="true"></div>
+        <div class="social-bar">
+            <div class="social-bar-inner">
+                <a href="https://instagram.com/n0xaryn" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="/assets/svg/instagram.svg" alt="Instagram Logo"></a>
+                <a href="https://discord.gg/NTdnAcGfRq" target="_blank" rel="noopener noreferrer" aria-label="Discord"><img src="/assets/svg/discord.svg" alt="Discord Logo"></a>
+                <a href="https://github.com/nxaryn" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><img src="/assets/svg/github.svg" alt="GitHub Logo"></a>
+                <a href="https://x.com/nxaryn" target="_blank" rel="noopener noreferrer" aria-label="X/Twitter"><img src="/assets/images/x.png" alt="X Logo"></a>
+                <a href="https://www.youtube.com/channel/UCGdge0kX9NnIxa6tPQ8w97g" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="/assets/svg/youtube.svg" alt="YouTube Logo"></a>
+            </div>
+        </div>
+        <div class="home">
+            <nav class="home-nav" aria-label="Main navigation">
+                <div class="wrap nav-inner">
+                    <a class="brand" href="/" aria-label="NeryxSVG home">
+                        <span>NeryxSVG</span>
+                        <small>v0.4</small>
+                    </a>
+                    <div class="home-nav-links">
+                        <a href="docs/">Documentation</a>
+                    </div>
+                    <div class="home-nav-right">
+                        <a class="btn btn-ghost btn-small" href="https://github.com/nxaryn/neryxsvg" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a class="btn btn-primary btn-small" href="/editor">
+                            Open editor
+                            <span aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <main>
+                <header class="hero">
+                    <div class="wrap hero-inner">
+                        <div class="hero-copy">
+                            <div class="eyebrow">
+                                <span class="status-dot"></span>
+                                Browser-based SVG editor
+                            </div>
+                            <div class="code-tag">
+                                M12 2L2 22
+                            </div>
+                            <h1>
+                                SVG that is
+                                <span class="accent">YOURS.</span>
+                            </h1>
+                            <p class="hero-lead">
+                                Draw SVGs visually, move them naturally, then
+                                fine-tune every coordinate when precision matters.
+                                NeryxSVG keeps the canvas and the code connected.
+                            </p>
+                            <div class="hero-actions">
+                                <a class="btn btn-primary btn-large" href="/editor">
+                                    Open editor
+                                    <span aria-hidden="true">→</span>
+                                </a>
+                                <a class="btn btn-ghost btn-large" href="#workflow">
+                                    See how it works
+                                </a>
+                            </div>
+                            <div class="hero-meta" aria-label="Product characteristics">
+                                <span>
+                                    <strong>100%</strong>
+                                    browser-based
+                                </span>
+                                <span>
+                                    <strong>SVG</strong>
+                                    native
+                                </span>
+
+                                <span>
+                                    <strong>MIT</strong>
+                                    licensed
+                                </span>
+                            </div>
+                        </div>
+                        <div class="hero-demo">
+                            <div class="editor-window panel">
+                                <img src="/assets/images/editor-preview.png" loading="eager" fetchpriority="high" alt="NeryxSVG browser-based SVG editor interface">
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <section class="statement">
+                    <div class="wrap statement-inner">
+                        <span class="section-kicker">The idea</span>
+                        <h2>
+                            Visual editing without
+                            <span class="muted">losing the code.</span>
+                        </h2>
+                        <p>
+                            NeryxSVG sits between drawing and writing SVG by hand.
+                            Create elements on a coordinate-based canvas, move them
+                            visually, then use exact numerical controls whenever
+                            you need precision.
+                        </p>
+                        <a style="margin-top: 1rem;" class="btn btn-secondary" href="/docs/about.html">
+                            Find out more
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </section>
+                <section class="workflow" id="workflow">
+                    <div class="wrap">
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-kicker">Workflow</span>
+                                <h2>
+                                    Draw. Drag. Fine-tune. Export.
+                                </h2>
+                            </div>
+                            <p>
+                                A simple workflow for turning an idea into usable
+                                SVG code.
+                            </p>
+                        </div>
+                        <div class="workflow-grid">
+                            <article class="workflow-step">
+                                <span class="step-number">01</span>
+                                <div class="step-icon">⌁</div>
+                                <h3>Draw</h3>
+                                <p>
+                                    Create rectangles, circles, lines, polygons,
+                                    paths, text and other native SVG elements
+                                    directly on the canvas.
+                                </p>
+                            </article>
+                            <article class="workflow-step">
+                                <span class="step-number">02</span>
+                                <div class="step-icon">↔</div>
+                                <h3>Drag</h3>
+                                <p>
+                                    Move and manipulate elements naturally.
+                                    Coordinates update as you work, so you can
+                                    see exactly where everything lives.
+                                </p>
+                            </article>
+                            <article class="workflow-step">
+                                <span class="step-number">03</span>
+                                <div class="step-icon">⌗</div>
+                                <h3>Fine-tune</h3>
+                                <p>
+                                    Enter exact X and Y values, dimensions,
+                                    radii, points, transforms and path data
+                                    whenever visual positioning isn't enough.
+                                </p>
+                            </article>
+                            <article class="workflow-step">
+                                <span class="step-number">04</span>
+                                <div class="step-icon">&lt;/&gt;</div>
+                                <h3>Export</h3>
+                                <p>
+                                    Take the resulting SVG with you. Copy the
+                                    markup or export it as a clean, reusable
+                                    SVG file.
+                                </p>
+                            </article>
+                        </div>
+                        <div class="section-kicker">
+                            <a style="width: 22%; margin-left: 39%; margin-top: 1rem; text-transform: none;" class="btn btn-primary btn-large" href="/docs/workflow.html">
+                                Learn the workflow
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <section class="features" id="features">
+                    <div class="wrap">
+                        <div class="section-heading centered">
+                            <span class="section-kicker">Built for precision</span>
+                            <h2>
+                                Everything revolves around
+                                <span class="accent">real SVG.</span>
+                            </h2>
+                            <p>
+                                NeryxSVG doesn't fake a vector editor with HTML
+                                positioning. The canvas works with actual SVG
+                                elements and actual SVG coordinates.
+                            </p>
+                        </div>
+                        <div class="feature-grid">
+                            <article class="feature-panel panel">
+                                <div class="feature-icon">⌖</div>
+                                <span class="feature-label">
+                                    Coordinates
+                                </span>
+                                <h3>Work on a real coordinate system</h3>
+                                <p>
+                                    Use a Cartesian-style SVG canvas with rulers,
+                                    grid spacing, snapping, zooming, panning and
+                                    live cursor coordinates.
+                                </p>
+                            </article>
+                            <article class="feature-panel panel">
+                                <div class="feature-icon">◈</div>
+                                <span class="feature-label">
+                                    Elements
+                                </span>
+                                <h3>Native SVG primitives</h3>
+                                <p>
+                                    Create rectangles, rounded rectangles,
+                                    circles, ellipses, lines, polygons,
+                                    polylines, paths and text.
+                                </p>
+                            </article>
+                            <article class="feature-panel panel">
+                                <div class="feature-icon">⌗</div>
+                                <span class="feature-label">
+                                    Precision
+                                </span>
+                                <h3>Numbers when you need them</h3>
+                                <p>
+                                    Position and resize objects numerically,
+                                    edit points directly and control the exact
+                                    values behind your design.
+                                </p>
+                            </article>
+                            <article class="feature-panel panel">
+                                <div class="feature-icon">⌘</div>
+                                <span class="feature-label">
+                                    Paths
+                                </span>
+                                <h3>Get closer to the geometry</h3>
+                                <p>
+                                    Work with path commands, nodes and Bézier
+                                    control points while keeping the generated
+                                    <code>d=""</code> value visible.
+                                </p>
+                            </article>
+                            <article class="feature-panel panel">
+                                <div class="feature-icon">≡</div>
+                                <span class="feature-label">
+                                    Layers
+                                </span>
+                                <h3>Keep complex SVGs organised</h3>
+                                <p>
+                                    Manage elements from a dedicated layer view.
+                                    Select, hide, lock, delete and reorder objects.
+                                </p>
+                            </article>
+                            <article class="feature-panel panel">
+                                <div class="feature-icon">&lt;/&gt;</div>
+                                <span class="feature-label">
+                                    Source
+                                </span>
+                                <h3>See the SVG behind the design</h3>
+                                <p>
+                                    View generated SVG markup, copy it directly
+                                    to your clipboard, and keep your output
+                                    usable outside the editor.
+                                </p>
+                            </article>
+                        </div>
+                        <a style="width: 20%; margin-left: 40%; margin-top: 1rem;" class="btn btn-primary btn-large" href="/docs/features.html">
+                            Discover more features
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </section>
+                <section class="code-showcase" id="developer">
+                    <div class="wrap code-showcase-inner">
+                        <div class="code-showcase-copy">
+                            <span class="section-kicker">
+                                Developer focused
+                            </span>
+                            <h2>
+                                The code isn't
+                                <span class="muted">hidden.</span>
+                            </h2>
+                            <p>
+                                NeryxSVG isn't trying to abstract SVG away from
+                                you. It makes the SVG easier to create.
+                            </p>
+                            <p>
+                                Every shape you create is a real SVG element,
+                                giving you output that can be used directly in
+                                websites, applications, games, interfaces,
+                                documentation and other SVG-compatible projects.
+                            </p>
+                            <a class="btn btn-primary" href="/editor">
+                                Start creating
+                                <span aria-hidden="true">→</span>
+                            </a>
+                            <a class="btn btn-secondary" href="/docs/developers.html">
+                                Find out more
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                        <div class="panel code-panel">
+                            <div class="panel-head">
+                                <span>circle.svg</span>
+                                <span class="hint">generated SVG</span>
+                            </div>
+                <pre class="code-panel-body"><code>
+<span class="tok-punc">&lt;</span><span class="tok-tag">svg</span>
+    <span class="tok-attr">viewBox</span><span class="tok-punc">=</span><span class="tok-str">"0 0 500 300"</span>
+    <span class="tok-attr">xmlns</span><span class="tok-punc">=</span><span class="tok-str">"http://www.w3.org/2000/svg"</span><span class="tok-punc">&gt;</span>
+    <span class="tok-punc">&lt;</span><span class="tok-tag">circle</span>
+        <span class="tok-attr">cx</span><span class="tok-punc">=</span><span class="tok-str">"250"</span>
+        <span class="tok-attr">cy</span><span class="tok-punc">=</span><span class="tok-str">"150"</span>
+        <span class="tok-attr">r</span><span class="tok-punc">=</span><span class="tok-str">"50"</span>
+    <span class="tok-punc">/&gt;</span>
+<span class="tok-punc">&lt;/</span><span class="tok-tag">svg</span><span class="tok-punc">&gt;</span></code>
+                </pre>
+                    </div>
+                    </div>
+                </section>
+                <section class="uses">
+                    <div class="wrap">
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-kicker">Use it anywhere</span>
+                                <h2>
+                                    Create once.
+                                    <span class="muted">Take the SVG with you.</span>
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="use-grid">
+                            <div class="use-item">
+                                <span>01</span>
+                                <strong>Websites</strong>
+                                <p>Icons, illustrations and interface graphics.</p>
+                            </div>
+                            <div class="use-item">
+                                <span>02</span>
+                                <strong>Applications</strong>
+                                <p>UI assets and scalable interface elements.</p>
+                            </div>
+                            <div class="use-item">
+                                <span>03</span>
+                                <strong>Game interfaces</strong>
+                                <p>HUD elements, icons and vector assets.</p>
+                            </div>
+                            <div class="use-item">
+                                <span>04</span>
+                                <strong>Documentation</strong>
+                                <p>Diagrams, technical graphics and examples.</p>
+                            </div>
+                        </div>
+                        <a style="width: 22%; margin-left: 39%; margin-top: 1rem;" class="btn btn-primary btn-large" href="/docs/key-uses.html">
+                            Learn more key uses
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </section>
+                <section class="opensource" id="opensource">
+                    <div class="wrap">
+                        <div class="opensource-panel panel">
+                            <div class="opensource-copy">
+                                <span class="section-kicker">
+                                    Open source
+                                </span>
+                                <h2>
+                                    Yours means
+                                    <span class="accent">open.</span>
+                                </h2>
+                                <p>
+                                    NeryxSVG is an independent open-source project.
+                                    Run it locally, modify the source, experiment
+                                    with the editor, or host your own version.
+                                </p>
+                                <div class="opensource-actions">
+                                    <a class="btn btn-primary" href="/docs/open-source.html">
+                                        Find out more
+                                        <span aria-hidden="true">→</span>
+                                    </a>
+                                    <a class="btn btn-secondary" href="https://github.com/nxaryn/neryxsvg" target="_blank" rel="noopener noreferrer">
+                                        View source
+                                        <span aria-hidden="true">↗</span>
+                                    </a>
+                                    <a class="btn btn-ghost" href="https://github.com/nxaryn/neryxsvg/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+                                        MIT License
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="terminal">
+                                <div class="terminal-head">
+                                    <span>noxaryn@127.0.0.1</span>
+                                    <span>local</span>
+                                </div>
+                                <pre>
+<span class="terminal-prompt">$</span> git clone https://github.com/nxaryn/neryxsvg.git
+<span class="terminal-prompt">$</span> cd neryxsvg
+<span class="terminal-prompt">$</span> python -m http.server
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="final-cta">
+                    <div class="wrap">
+                        <span class="section-kicker">
+                            NeryxSVG
+                        </span>
+                        <h2>
+                            Stop guessing coordinates.
+                        </h2>
+                        <p>
+                            Draw it. Move it. Fine-tune it. Take the SVG.
+                        </p>
+                        <a class="btn btn-primary btn-large" href="/editor">
+                            Open NeryxSVG
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </section>
+            </main>
+            <footer class="home-footer">
+                <div class="wrap footer-inner">
+                    <div class="footer-brand">
+                        <strong>NeryxSVG</strong>
+                        <span>Noxaryn</span>
+                        <span>&dash;</span>
+                        <span>
+                            SVG that is YOURS.
+                        </span>
+                    </div>
+                    <div class="footer-links">
+                        <a href="https://github.com/nxaryn/neryxsvg" target="_blank" rel="noopener noreferrer">
+                            Source
+                        </a>
+                        <a href="/docs/">Documentation</a>
+                        <a href="/editor">Editor</a>
+                    </div>
+                    <div class="footer-meta">
+                        <span>v0.4</span>
+                        <span>MIT</span>
+                        <span>Built with SVG</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

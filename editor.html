@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Free Online SVG Editor for Developers | NeryxSVG</title>
+        <link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+        <link rel="manifest" href="/manifest.webmanifest">
+        <meta name="theme-color" content="#14181c">
+        <meta name="description" content="Create and edit SVG graphics directly in your browser with NeryxSVG. Use visual editing tools, native SVG elements, precise coordinates, Bézier paths, and direct source-code editing.">
+        <meta name="author" content="Noxaryn">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://neryxsvg.web.app/editor">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Free Online SVG Editor for Developers | NeryxSVG">
+        <meta property="og:description" content="Create and edit SVG graphics directly in your browser with NeryxSVG. Use visual editing tools, native SVG elements, precise coordinates, Bézier paths, and direct source-code editing.">
+        <meta property="og:url" content="https://neryxsvg.web.app/editor">
+        <meta property="og:site_name" content="NeryxSVG">
+        <meta property="og:image" content="https://neryxsvg.web.app/assets/og-image.png">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="Free Online SVG Editor for Developers | NeryxSVG">
+        <meta name="twitter:description" content="Create and edit SVG graphics directly in your browser with NeryxSVG.">
+        <meta name="twitter:image" content="https://neryxsvg.web.app/assets/og-image.png">
+        <link rel="stylesheet" href="/styles/editor.css">
+        <link rel="stylesheet" href="/styles/context-menu.css">
+    </head>
+    <body>
+        <h1 class="visually-hidden">Free Online SVG Editor for Developers | NeryxSVG</h1>
+        <div id="app">
+            <div id="topbar">
+                <a class="brand" href="index.html">NeryxSVG<small>SVG editor</small></a>
+                <div class="topgroup">
+                    <button id="btnOpenProject" title="Open a NeryxSVG project (.nsvg) or an SVG file (Ctrl+O)">Open</button>
+                    <button id="btnSaveProject" title="Save project (Ctrl+S)">Save</button>
+                    <button id="btnSaveProjectAs" title="Save project as a new file (Ctrl+Shift+S)">Save As</button>
+                </div>
+                <div class="topgroup">
+                    <button id="btnNew" title="New document">New</button>
+                    <button id="btnImport" title="Import SVG file">Import SVG</button>
+                    <button id="btnExport" title="Export SVG file">Export SVG</button>
+                    <button id="btnFitPage" title="Set the exported page size to fit current content (until you fit again)">Fit Page</button>
+                </div>
+                <div class="topgroup">
+                    <button id="btnUndo" class="icon-btn" title="Undo (Ctrl+Z)">↶</button>
+                    <button id="btnRedo" class="icon-btn" title="Redo (Ctrl+Shift+Z)">↷</button>
+                </div>
+                <div class="topgroup">
+                    <button id="btnZoomOut" class="icon-btn" title="Zoom out">−</button>
+                    <input id="zoomPct" type="text" value="100%">
+                    <button id="btnZoomIn" class="icon-btn" title="Zoom in">+</button>
+                    <button id="btnZoomFit" title="Fit content">Fit</button>
+                    <button id="btnZoom100" title="100%">1:1</button>
+                </div>
+                <div class="topgroup">
+                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkGrid" checked> Grid</label>
+                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkSnap" checked> Snap</label>
+                    <label style="display:flex;align-items:center;gap:5px;">Spacing <input id="gridSizeInput" type="number" value="10" min="1" style="width:50px;"></label>
+                </div>
+                <div class="topgroup">
+                    <button id="btnGroup" title="Group (Ctrl+G)">Group</button>
+                    <button id="btnUngroup" title="Ungroup (Ctrl+Shift+G)">Ungroup</button>
+                </div>
+                <div class="topgroup" style="margin-left:auto;">
+                    <button id="btnDuplicate" title="Duplicate (Ctrl+D)">Duplicate</button>
+                    <button id="btnDelete" title="Delete (Del)">Delete</button>
+                </div>
+            </div>
+        <div id="body">
+            <div id="toolbar"></div>
+                <div id="canvasWrap">
+                    <div id="cornerBox"></div>
+                    <canvas id="rulerTop"></canvas>
+                    <canvas id="rulerLeft"></canvas>
+                    <div id="canvasScroll">
+                        <svg id="svgRoot" xmlns="http://www.w3.org/2000/svg">
+                            <defs></defs>
+                            <g id="gridLayer"></g>
+                            <g id="elementsLayer"></g>
+                            <g id="overlayLayer"></g>
+                        </svg>
+                        <div id="pathHint">
+                            <span>Next segment:</span>
+                            <select id="pathSegType">
+                                <option value="L">Line</option>
+                                <option value="H">Horizontal</option>
+                                <option value="V">Vertical</option>
+                                <option value="C">Cubic Bézier</option>
+                                <option value="Q">Quadratic Bézier</option>
+                                <option value="S">Smooth Cubic</option>
+                            </select>
+                            <button id="btnClosePath">Close</button>
+                            <button id="btnFinishPath">Finish</button>
+                            <span style="color:var(--text-dimmer);">Esc to cancel</span>
+                        </div>
+                    </div>
+                <div id="coordReadout"><span>X</span>0 <span>Y</span>0</div>
+            </div>
+            <div id="rightPanel">
+                <div id="layersSection">
+                    <div class="panel-head"><span>Layers</span><span class="hint" id="layerCount">0</span></div>
+                    <div id="layersList" role="listbox" aria-multiselectable="true" aria-label="Layers"></div>
+                </div>
+                <div id="inspectorSection">
+                    <div class="panel-head"><span>Inspector</span><span class="hint" id="inspTypeLabel"></span></div>
+                    <div id="inspectorBody"></div>
+                </div>
+            </div>
+        </div>
+        <div id="bottomPanel">
+            <div id="codeTabHeader">
+                <span class="chev">▾</span>
+                <span class="title">SVG Source</span>
+                <span class="spacer"></span>
+                <button id="btnCopySvg">Copy</button>
+            </div>
+            <div id="codeEditorWrap">
+                <pre id="codeHighlight"><code></code></pre>
+                <textarea id="codeText" spellcheck="false"></textarea>
+            </div>
+        </div>
+        </div>
+        <section class="editor-description">
+            <div class="editor-description-inner">
+                <h2>Free Online SVG Editor</h2>
+                <p>NeryxSVG is a browser-based SVG editor built for developers. Create vector graphics using native SVG elements, manipulate objects visually, fine-tune coordinates, edit Bézier paths, and export clean SVG code. No installation required.</p>
+            </div>
+        </section>
+        <input type="file" id="fileInput" class="hidden-file-input" accept=".svg,image/svg+xml">
+        <input type="file" id="projectFileInput" class="hidden-file-input" accept=".nsvg,.svg,application/json,image/svg+xml">
+        <div class="toast" id="toast"></div>
+        <script type="module" src="/js/app/main.js"></script>
+    </body>
+</html>

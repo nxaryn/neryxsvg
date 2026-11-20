@@ -1,0 +1,24 @@
+{
+  "name": "NeryxSVG",
+  "short_name": "NeryxSVG",
+  "description": "A free, local-first, browser-native SVG editor \u2014 draw, edit, and export clean SVG. No account, no server-side processing.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#14181c",
+  "theme_color": "#14181c",
+  "icons": [
+    {
+      "src": "/assets/svg/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/svg/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
