@@ -73,6 +73,11 @@ hr{border:none;border-top:1px solid var(--border-soft);margin:8px 0;}
     background:var(--panel);border-bottom:1px solid var(--border);
     overflow-x:auto;
 }
+#topbar h1 {
+    margin: 0;
+    font-size: inherit;
+    line-height: 1;
+}
 .brand{font-weight:600;font-size:12px;letter-spacing:.03em;color:var(--accent);white-space:nowrap;margin-right:4px;}
 .brand small{color:var(--text-dimmer);font-weight:400;margin-left:4px;}
 .topgroup{display:flex;align-items:center;gap:4px;padding:0 8px;border-left:1px solid var(--border-soft);white-space:nowrap;}
