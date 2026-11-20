@@ -27,9 +27,12 @@ let codeEditingByUser = false;
 
 function highlightXML(src){
   return src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/(&lt;\/?)([a-zA-Z0-9]+)/g, '$1<span class="tok-tag">$2</span>')
-    .replace(/([a-zA-Z-]+)(=)(&quot;|")([^"]*)(&quot;|")/g, '<span class="tok-attr">$1</span>$2<span class="tok-str">$3$4$5</span>')
-    .replace(/(\/?&gt;)/g, '<span class="tok-punc">$1</span>');
+    .replace(/(&lt;\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?&gt;)/g,
+      (match, openTag, tagName, rest, closeTag) => {
+        const highlightedRest = rest.replace(/([a-zA-Z-]+)(=)(&quot;|")([^"]*)(&quot;|")/g,
+          '<span class="tok-attr">$1</span>$2<span class="tok-str">$3$4$5</span>');
+        return `${openTag}<span class="tok-tag">${tagName}</span>${highlightedRest}<span class="tok-punc">${closeTag}</span>`;
+      });
 }
 
 export function syncCodePanel(){

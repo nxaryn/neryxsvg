@@ -45,8 +45,8 @@ const ALLOWED_ATTRS = new Set([
   'font-size','font-family','font-weight','font-style','text-anchor',
   'letter-spacing',
   'offset','stop-color','stop-opacity','gradientunits',
-  'filterunits','patternunits','patterncontentunits',
-  'filter',
+  'filterunits','patternunits','patterncontentunits','primitiveunits',
+  'filter','stddeviation',
   'href','xlink:href',
 ]);
 
