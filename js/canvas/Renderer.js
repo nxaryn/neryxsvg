@@ -33,6 +33,17 @@ export function renderDefs(){
   const seen = new Set();
   defs.forEach(g=>{
     seen.add(g.id);
+    if(g.type === 'filter' || g.type === 'pattern'){
+      let node = gradientNodeById.get(g.id);
+      if(!node){
+        node = document.createElementNS(SVG_NS, 'g');
+        node.setAttribute('id', g.id);
+        gradientNodeById.set(g.id, node);
+      }
+      node.innerHTML = g.html;
+      if(node.parentNode !== defsLayer) defsLayer.appendChild(node);
+      return;
+    }
     const tag = g.kind==='radial' ? 'radialGradient' : 'linearGradient';
     let node = gradientNodeById.get(g.id);
     if(node && node.tagName.toLowerCase()!==tag.toLowerCase()){
@@ -45,9 +56,11 @@ export function renderDefs(){
     }
     if(g.kind==='radial'){
       node.setAttribute('cx', g.cx); node.setAttribute('cy', g.cy); node.setAttribute('r', g.r);
+      if(g.gradientUnits) node.setAttribute('gradientUnits', g.gradientUnits);
     } else {
       node.setAttribute('x1', g.x1); node.setAttribute('y1', g.y1);
       node.setAttribute('x2', g.x2); node.setAttribute('y2', g.y2);
+      if(g.gradientUnits) node.setAttribute('gradientUnits', g.gradientUnits);
     }
 
     node.innerHTML = '';
@@ -136,6 +149,8 @@ function applyShapeAttrs(node, el){
     else node.removeAttribute('stroke-dasharray');
     if(el.style.strokeDashoffset) node.setAttribute('stroke-dashoffset', el.style.strokeDashoffset);
     else node.removeAttribute('stroke-dashoffset');
+    if(a.filter) node.setAttribute('filter', a.filter);
+    else node.removeAttribute('filter');
   }
 }
 function round2(n){ return Math.round(n*100)/100; }
