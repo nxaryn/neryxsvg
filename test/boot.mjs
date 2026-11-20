@@ -9,10 +9,10 @@ import { JSDOM } from 'jsdom';
 import 'fake-indexeddb/auto';
 
 const root = path.resolve(import.meta.dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(root, 'editor.html'), 'utf8');
 
 const dom = new JSDOM(html, {
-  url: 'https://neryxsvg.test/index.html',
+  url: 'https://neryxsvg.test/editor.html',
   runScripts: 'dangerously',
   resources: 'usable',
   pretendToBeVisual: true,
