@@ -21,7 +21,8 @@ body{
     color:var(--text);
     font-family:var(--sans);
     font-size:12px;
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
     -webkit-font-smoothing:antialiased;
 }
 button{
