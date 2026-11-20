@@ -8,8 +8,6 @@ function escapeXml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;
 
 
 
-
-
 function leafTransformAttr(el, cx, cy){
   const parts = [];
   if(el.rotation) parts.push(`rotate(${round2(el.rotation)} ${round2(cx)} ${round2(cy)})`);
@@ -37,17 +35,18 @@ function elementToMarkup(doc, el, indent){
   }
 
   const a = el.attrs;
-  const styleAttrs = [
-    `fill="${el.style.fill}"`,
-    `stroke="${el.style.stroke}"`,
-    `stroke-width="${el.style.strokeWidth}"`,
-    el.style.fillOpacity!=null ? `fill-opacity="${el.style.fillOpacity}"` : '',
-    el.style.strokeOpacity!=null && el.style.strokeOpacity<1 ? `stroke-opacity="${el.style.strokeOpacity}"` : '',
-    el.style.strokeLinecap && el.style.strokeLinecap!=='butt' ? `stroke-linecap="${el.style.strokeLinecap}"` : '',
-    el.style.strokeLinejoin && el.style.strokeLinejoin!=='miter' ? `stroke-linejoin="${el.style.strokeLinejoin}"` : '',
-    el.style.strokeDasharray ? `stroke-dasharray="${el.style.strokeDasharray}"` : '',
-    el.style.strokeDashoffset ? `stroke-dashoffset="${el.style.strokeDashoffset}"` : '',
-  ].filter(Boolean).join(' ');
+  const styleAttrs = [];
+  if(el.style.fill != null) styleAttrs.push(`fill="${el.style.fill}"`);
+  if(el.style.stroke != null) styleAttrs.push(`stroke="${el.style.stroke}"`);
+  if(el.style.strokeWidth != null) styleAttrs.push(`stroke-width="${el.style.strokeWidth}"`);
+  if(el.style.fillOpacity != null) styleAttrs.push(`fill-opacity="${el.style.fillOpacity}"`);
+  if(el.style.strokeOpacity != null && el.style.strokeOpacity < 1) styleAttrs.push(`stroke-opacity="${el.style.strokeOpacity}"`);
+  if(el.style.strokeLinecap && el.style.strokeLinecap !== 'butt') styleAttrs.push(`stroke-linecap="${el.style.strokeLinecap}"`);
+  if(el.style.strokeLinejoin && el.style.strokeLinejoin !== 'miter') styleAttrs.push(`stroke-linejoin="${el.style.strokeLinejoin}"`);
+  if(el.style.strokeDasharray) styleAttrs.push(`stroke-dasharray="${el.style.strokeDasharray}"`);
+  if(el.style.strokeDashoffset) styleAttrs.push(`stroke-dashoffset="${el.style.strokeDashoffset}"`);
+  if(a.filter) styleAttrs.push(`filter="${a.filter}"`);
+  const styleAttrStr = styleAttrs.join(' ');
   const b = shapeLocalBounds(el);
   const cx = b.x+b.w/2, cy = b.y+b.h/2;
   const t = leafTransformAttr(el, cx, cy);
@@ -55,30 +54,26 @@ function elementToMarkup(doc, el, indent){
   let tag = '';
   switch(el.type){
     case 'rect': case 'rrect':
-      tag = `<rect x="${round2(a.x)}" y="${round2(a.y)}" width="${round2(a.width)}" height="${round2(a.height)}"${el.type==='rrect'?` rx="${round2(a.rx||0)}" ry="${round2(a.ry!=null?a.ry:(a.rx||0))}"`:''} ${styleAttrs}${transformAttr}/>`; break;
+      tag = `<rect x="${round2(a.x)}" y="${round2(a.y)}" width="${round2(a.width)}" height="${round2(a.height)}"${el.type==='rrect'?` rx="${round2(a.rx||0)}" ry="${round2(a.ry!=null?a.ry:(a.rx||0))}"`:''} ${styleAttrStr}${transformAttr}/>`; break;
     case 'circle':
-      tag = `<circle cx="${round2(a.cx)}" cy="${round2(a.cy)}" r="${round2(a.r)}" ${styleAttrs}${transformAttr}/>`; break;
+      tag = `<circle cx="${round2(a.cx)}" cy="${round2(a.cy)}" r="${round2(a.r)}" ${styleAttrStr}${transformAttr}/>`; break;
     case 'ellipse':
-      tag = `<ellipse cx="${round2(a.cx)}" cy="${round2(a.cy)}" rx="${round2(a.rx)}" ry="${round2(a.ry)}" ${styleAttrs}${transformAttr}/>`; break;
+      tag = `<ellipse cx="${round2(a.cx)}" cy="${round2(a.cy)}" rx="${round2(a.rx)}" ry="${round2(a.ry)}" ${styleAttrStr}${transformAttr}/>`; break;
     case 'line':
-      tag = `<line x1="${round2(a.x1)}" y1="${round2(a.y1)}" x2="${round2(a.x2)}" y2="${round2(a.y2)}" ${styleAttrs}${transformAttr}/>`; break;
+      tag = `<line x1="${round2(a.x1)}" y1="${round2(a.y1)}" x2="${round2(a.x2)}" y2="${round2(a.y2)}" ${styleAttrStr}${transformAttr}/>`; break;
     case 'polygon': case 'polyline':
-      tag = `<${el.type} points="${a.points.map(p=>`${round2(p.x)},${round2(p.y)}`).join(' ')}" ${styleAttrs}${transformAttr}/>`; break;
+      tag = `<${el.type} points="${a.points.map(p=>`${round2(p.x)},${round2(p.y)}`).join(' ')}" ${styleAttrStr}${transformAttr}/>`; break;
     case 'path':
-      tag = `<path d="${pathToD(a.commands)}" ${styleAttrs}${transformAttr}/>`; break;
+      tag = `<path d="${pathToD(a.commands)}" ${styleAttrStr}${transformAttr}/>`; break;
     case 'text': {
-
-
-
-
-
+      const textFill = el.style.fill != null ? ` fill="${el.style.fill}"` : '';
       const textAttrs = [
         a.fontWeight && a.fontWeight!=='normal' ? `font-weight="${a.fontWeight}"` : '',
         a.fontStyle && a.fontStyle!=='normal' ? `font-style="${a.fontStyle}"` : '',
         a.textAnchor && a.textAnchor!=='start' ? `text-anchor="${a.textAnchor}"` : '',
         a.letterSpacing ? `letter-spacing="${round2(a.letterSpacing)}"` : '',
       ].filter(Boolean).join(' ');
-      tag = `<text x="${round2(a.x)}" y="${round2(a.y)}" font-size="${a.fontSize}" font-family="${a.fontFamily||'monospace'}"${textAttrs?` ${textAttrs}`:''} fill="${el.style.fill}"${transformAttr}>${escapeXml(a.content||'')}</text>`; break;
+      tag = `<text x="${round2(a.x)}" y="${round2(a.y)}" font-size="${a.fontSize}" font-family="${a.fontFamily||'monospace'}"${textAttrs?` ${textAttrs}`:''}${textFill}${transformAttr}>${escapeXml(a.content||'')}</text>`; break;
     }
     case 'raw':
       tag = a.html; break;
@@ -100,16 +95,12 @@ export function computeContentBounds(doc, topLevelEls){
 
 
 
-
-
-
 export function resolvePageBounds(doc, topLevelEls){
   if(!doc.settings.autoFitViewBox){
     return { x:doc.viewBox.x, y:doc.viewBox.y, w:doc.viewBox.width, h:doc.viewBox.height };
   }
   return computeContentBounds(doc, topLevelEls);
 }
-
 
 
 
@@ -121,13 +112,17 @@ export function fitDocumentToContent(doc, topLevelEls){
   return b;
 }
 
-function usedGradientIds(doc, topLevelEls){
+export function usedGradientIds(doc, topLevelEls){
   const ids = new Set();
   const visit = (el)=>{
     if(el.style){
       const f = gradientIdFromRef(el.style.fill), s = gradientIdFromRef(el.style.stroke);
       if(f) ids.add(f);
       if(s) ids.add(s);
+    }
+    if(el.attrs){
+      const fr = gradientIdFromRef(el.attrs.filter);
+      if(fr) ids.add(fr);
     }
     if(el.type==='group') getChildren(doc, el.id).forEach(visit);
   };
@@ -139,17 +134,26 @@ function gradientToMarkup(g){
   const stops = g.stops.map(s=>
     `    <stop offset="${s.offset}" stop-color="${s.color}"${s.opacity!=null && s.opacity<1 ? ` stop-opacity="${s.opacity}"`:''}/>`
   ).join('\n');
+  const gu = g.gradientUnits ? ` gradientUnits="${g.gradientUnits}"` : '';
   if(g.kind==='radial'){
-    return `  <radialGradient id="${g.id}" cx="${g.cx}" cy="${g.cy}" r="${g.r}">\n${stops}\n  </radialGradient>`;
+    return `  <radialGradient id="${g.id}"${gu} cx="${g.cx}" cy="${g.cy}" r="${g.r}">\n${stops}\n  </radialGradient>`;
   }
-  return `  <linearGradient id="${g.id}" x1="${g.x1}" y1="${g.y1}" x2="${g.x2}" y2="${g.y2}">\n${stops}\n  </linearGradient>`;
+  return `  <linearGradient id="${g.id}"${gu} x1="${g.x1}" y1="${g.y1}" x2="${g.x2}" y2="${g.y2}">\n${stops}\n  </linearGradient>`;
+}
+
+function defToMarkup(d){
+  if(d.type === 'filter' || d.type === 'pattern') return `  ${d.html}`;
+  return gradientToMarkup(d);
 }
 
 export function serializeSVG(doc, topLevelEls){
   const b = resolvePageBounds(doc, topLevelEls);
   const usedIds = usedGradientIds(doc, topLevelEls);
-  const defsBlock = (doc.defs||[]).filter(g=>usedIds.has(g.id)).map(gradientToMarkup).join('\n');
+  const defsBlock = (doc.defs||[]).filter(g=>usedIds.has(g.id)).map(defToMarkup).join('\n');
   const defs = defsBlock ? `<defs>\n${defsBlock}\n</defs>\n` : '';
   const body = topLevelEls.map(el=>elementToMarkup(doc, el, 1)).filter(Boolean).join('\n');
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${round2(b.x)} ${round2(b.y)} ${round2(b.w)} ${round2(b.h)}" width="${round2(b.w)}" height="${round2(b.h)}">\n${defs}${body}\n</svg>`;
+  const rootAttrs = doc.rootAttrs ? Object.entries(doc.rootAttrs).map(([k,v])=>` ${k}="${escapeXml(v)}"`).join('') : '';
+  const title = doc.metadata.title ? `\n  <title>${escapeXml(doc.metadata.title)}</title>` : '';
+  const desc = doc.metadata.desc ? `\n  <desc>${escapeXml(doc.metadata.desc)}</desc>` : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${round2(b.x)} ${round2(b.y)} ${round2(b.w)} ${round2(b.h)}" width="${round2(b.w)}" height="${round2(b.h)}"${rootAttrs}>${title}${desc}\n${defs}${body}\n</svg>`;
 }

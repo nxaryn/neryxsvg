@@ -109,25 +109,32 @@ function readFillOrStroke(node, attr, gradientIdRemap){
 }
 
 function makeImportedElement(type, attrs, node, parentId, gradientIdRemap){
-  const el = createElement(type, attrs, parentId);
+  const el = {
+    id: uid('el'), type, name: null, parentId: parentId || null,
+    attrs, style: {},
+    rotation: 0, flipX: false, flipY: false,
+    visible: true, locked: false,
+  };
   const fill = readFillOrStroke(node, 'fill', gradientIdRemap);
   const stroke = readFillOrStroke(node, 'stroke', gradientIdRemap);
-  el.style.fill = fill || (type==='line'||type==='polyline'||type==='path' ? 'none' : el.style.fill);
-  el.style.stroke = stroke || el.style.stroke;
+  if(fill !== null) el.style.fill = fill;
+  if(stroke !== null) el.style.stroke = stroke;
   const swAttr = node.getAttribute('stroke-width');
-  if(swAttr) el.style.strokeWidth = parseFloat(swAttr);
+  if(swAttr != null) el.style.strokeWidth = parseFloat(swAttr);
   const foAttr = node.getAttribute('fill-opacity');
-  if(foAttr) el.style.fillOpacity = parseFloat(foAttr);
+  if(foAttr != null) el.style.fillOpacity = parseFloat(foAttr);
   const soAttr = node.getAttribute('stroke-opacity');
-  if(soAttr) el.style.strokeOpacity = parseFloat(soAttr);
+  if(soAttr != null) el.style.strokeOpacity = parseFloat(soAttr);
   const capAttr = node.getAttribute('stroke-linecap');
-  if(capAttr) el.style.strokeLinecap = capAttr;
+  if(capAttr != null) el.style.strokeLinecap = capAttr;
   const joinAttr = node.getAttribute('stroke-linejoin');
-  if(joinAttr) el.style.strokeLinejoin = joinAttr;
+  if(joinAttr != null) el.style.strokeLinejoin = joinAttr;
   const dashAttr = node.getAttribute('stroke-dasharray');
-  if(dashAttr) el.style.strokeDasharray = dashAttr;
+  if(dashAttr != null) el.style.strokeDasharray = dashAttr;
   const dashOffAttr = node.getAttribute('stroke-dashoffset');
-  if(dashOffAttr) el.style.strokeDashoffset = parseFloat(dashOffAttr);
+  if(dashOffAttr != null) el.style.strokeDashoffset = parseFloat(dashOffAttr);
+  const filterAttr = node.getAttribute('filter');
+  if(filterAttr != null) el.attrs.filter = filterAttr;
   return el;
 }
 
@@ -146,8 +153,8 @@ function parseGradients(root){
     }));
     if(!stops.length) return;
     const g = kind==='radial'
-      ? { id: uid('grad'), kind, cx: numOr(node,'cx',0.5), cy: numOr(node,'cy',0.5), r: numOr(node,'r',0.5), stops }
-      : { id: uid('grad'), kind, x1: numOr(node,'x1',0), y1: numOr(node,'y1',0), x2: numOr(node,'x2',1), y2: numOr(node,'y2',0), stops };
+      ? { id: uid('grad'), kind, cx: numOr(node,'cx',0.5), cy: numOr(node,'cy',0.5), r: numOr(node,'r',0.5), stops, gradientUnits: node.getAttribute('gradientUnits') }
+      : { id: uid('grad'), kind, x1: numOr(node,'x1',0), y1: numOr(node,'y1',0), x2: numOr(node,'x2',1), y2: numOr(node,'y2',0), stops, gradientUnits: node.getAttribute('gradientUnits') };
     gradients.push(g);
     idRemap.set(origId, g.id);
   });
@@ -156,6 +163,17 @@ function parseGradients(root){
 function numOr(node, attr, fallback){
   const v = node.getAttribute(attr);
   return v!=null ? parseFloat(v) : fallback;
+}
+
+function parseDefs(root){
+  const defs = [];
+  root.querySelectorAll('filter').forEach(node=>{
+    defs.push({ type: 'filter', id: node.getAttribute('id'), html: node.outerHTML });
+  });
+  root.querySelectorAll('pattern').forEach(node=>{
+    defs.push({ type: 'pattern', id: node.getAttribute('id'), html: node.outerHTML });
+  });
+  return defs;
 }
 
 const MAX_USE_DEPTH = 8;
@@ -276,7 +294,7 @@ function importSVGSource(src, keepView){
     Array.from(node.children).forEach(child=>{
       const tag = child.tagName.toLowerCase();
 
-      if(tag==='defs' || tag==='symbol') return;
+      if(tag==='defs' || tag==='symbol' || tag==='title' || tag==='desc') return;
       convertOneNode(child, parentId, ancestorIds);
     });
   }
@@ -284,7 +302,16 @@ function importSVGSource(src, keepView){
 
   const newDoc = createDocument();
   newDoc.elements = newElements;
-  newDoc.defs = gradients;
+  newDoc.defs = [...gradients, ...parseDefs(root)];
+  const rootAttrs = {};
+  for(const attr of root.attributes){
+    rootAttrs[attr.name] = attr.value;
+  }
+  newDoc.rootAttrs = rootAttrs;
+  const rootTitle = root.querySelector('title');
+  const rootDesc = root.querySelector('desc');
+  if(rootTitle) newDoc.metadata.title = rootTitle.textContent;
+  if(rootDesc) newDoc.metadata.desc = rootDesc.textContent;
   const importedViewBox = root.getAttribute('viewBox');
   if(importedViewBox){
     const parts = importedViewBox.trim().split(/[\s,]+/).map(Number);
