@@ -54,7 +54,11 @@
                     <button id="btnZoom100" title="100%">1:1</button>
                 </div>
                 <div class="topgroup">
+                    <label style="display:flex;align-items:center;gap:5px;"><select id="selTheme" style="font-size:11px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);"><option value="dark">Theme: Dark</option><option value="light">Theme: Light</option><option value="midnight">Theme: Midnight</option></select></label>
+                    <label style="display:flex;align-items:center;gap:5px;"><select id="selCanvasBg" style="font-size:11px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);"><option value="transparent">Bg: Transparent</option><option value="white">Bg: White</option><option value="black">Bg: Black</option><option value="grey">Bg: Grey</option><option value="custom">Bg: Custom</option></select></label>
+                    <input type="color" id="selCanvasColor" value="#0a0d10" style="width:24px;height:24px;border:none;border-radius:3px;padding:0;cursor:pointer;display:none;">
                     <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkGrid" checked> Grid</label>
+                    <label style="display:flex;align-items:center;gap:5px;"><select id="selGridStyle" style="font-size:11px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);"><option value="squares">Squares</option><option value="dots">Dots</option><option value="none">None</option></select></label>
                     <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkSnap" checked> Snap</label>
                     <label style="display:flex;align-items:center;gap:5px;">Spacing <input id="gridSizeInput" type="number" value="10" min="1" style="width:50px;"></label>
                 </div>

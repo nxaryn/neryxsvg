@@ -30,6 +30,70 @@
   color-scheme: dark;
 }
 
+/* Editor Themes */
+body.theme-light{
+  --bg: #f5f7f9;
+  --panel: #ffffff;
+  --panel-2: #eef1f3;
+  --border: #d1d5db;
+  --border-soft: #e5e7eb;
+  --text: #111827;
+  --text-dim: #4b5563;
+  --text-dimmer: #6b7280;
+  --accent: #0ea5e9;
+  --accent-strong: #0284c7;
+  --accent-dim: #0369a1;
+  --danger: #dc2626;
+  --danger-dim: #b91c1c;
+  --warn: #d97706;
+  color-scheme: light;
+}
+
+body.theme-midnight{
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel-2: #334155;
+  --border: #475569;
+  --border-soft: #334155;
+  --text: #f8fafc;
+  --text-dim: #cbd5e1;
+  --text-dimmer: #94a3b8;
+  --accent: #22d3ee;
+  --accent-strong: #67e8f9;
+  --accent-dim: #0891b2;
+  --danger: #f87171;
+  --danger-dim: #ef4444;
+  --warn: #fbbf24;
+  color-scheme: dark;
+}
+
+/* Canvas Backgrounds */
+#canvasScroll.bg-transparent{
+  background:
+    linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
+    linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
+    var(--bg);
+}
+#canvasScroll.bg-white{ background: #ffffff; }
+#canvasScroll.bg-black{ background: #000000; }
+#canvasScroll.bg-grey{ background: #e5e7eb; }
+
+/* Grid overlays */
+#canvasScroll.grid-dots{
+  background-image:
+    radial-gradient(var(--text-dimmer) 0.5px, transparent 0.5px),
+    var(--canvas-bg-color);
+  background-size: 20px 20px;
+}
+#canvasScroll.grid-squares{
+  background-image:
+    linear-gradient(var(--text-dimmer) 1px, transparent 1px),
+    linear-gradient(90deg, var(--text-dimmer) 1px, transparent 1px),
+    var(--canvas-bg-color);
+  background-size: 20px 20px;
+}
+#canvasScroll.grid-none{ background-image: none; }
+
 html, body{
   height: 100%;
   margin: 0;
@@ -195,11 +259,38 @@ button:focus-visible{ outline-offset: 2px; }
   grid-column: 2; grid-row: 2;
   position: relative;
   overflow: auto;
-  background:
-    linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
-    linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
-    var(--bg);
+  background-color: var(--canvas-bg-color, var(--bg));
+  background-image: var(--canvas-bg-image, none);
+  background-size: var(--canvas-bg-size, auto);
+  background-position: var(--canvas-bg-position, 0 0);
+  background-repeat: repeat;
 }
+
+/* Canvas Backgrounds */
+#canvasScroll.bg-transparent{
+  --canvas-bg-color: transparent;
+  --canvas-bg-image:
+    linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
+    linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px;
+  --canvas-bg-size: 16px 16px;
+}
+#canvasScroll.bg-white{ --canvas-bg-color: #ffffff; --canvas-bg-image: none; }
+#canvasScroll.bg-black{ --canvas-bg-color: #000000; --canvas-bg-image: none; }
+#canvasScroll.bg-grey{ --canvas-bg-color: #e5e7eb; --canvas-bg-image: none; }
+
+/* Grid overlays */
+#canvasScroll.grid-dots{
+  --canvas-bg-image:
+    radial-gradient(var(--text-dimmer) 0.5px, transparent 0.5px);
+  --canvas-bg-size: 20px 20px;
+}
+#canvasScroll.grid-squares{
+  --canvas-bg-image:
+    linear-gradient(var(--text-dimmer) 1px, transparent 1px),
+    linear-gradient(90deg, var(--text-dimmer) 1px, transparent 1px);
+  --canvas-bg-size: 20px 20px;
+}
+#canvasScroll.grid-none{ --canvas-bg-image: none; }
 
 #svgRoot{ display: block; cursor: default; }
 #svgRoot.tool-select{ cursor: default; }

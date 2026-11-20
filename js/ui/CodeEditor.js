@@ -409,3 +409,84 @@ document.getElementById('btnExportPng').addEventListener('click', ()=>{
   if(!elements) return;
   exportPng(elements);
 });
+
+/* --- Editor Themes & Canvas Background --- */
+const THEME_KEY = 'neryxsvg:theme';
+const CANVAS_BG_KEY = 'neryxsvg:canvasBg';
+const CANVAS_COLOR_KEY = 'neryxsvg:canvasColor';
+const GRID_STYLE_KEY = 'neryxsvg:gridStyle';
+
+const selTheme = document.getElementById('selTheme');
+const selCanvasBg = document.getElementById('selCanvasBg');
+const selCanvasColor = document.getElementById('selCanvasColor');
+const chkGrid = document.getElementById('chkGrid');
+const selGridStyle = document.getElementById('selGridStyle');
+const canvasScroll = document.getElementById('canvasScroll');
+
+function applyTheme(theme){
+  document.body.className = '';
+  if(theme && theme !== 'dark') document.body.classList.add('theme-' + theme);
+  localStorage.setItem(THEME_KEY, theme || 'dark');
+}
+
+function applyCanvasBg(bg){
+  const gridStyle = selGridStyle.value;
+  let image = '';
+  let size = '';
+  const add = function(part, sz){
+    image = image ? image + ', ' + part : part;
+    size = size ? size + ', ' + sz : sz;
+  };
+  if(bg === 'transparent'){
+    add('linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px', '16px 16px');
+    add('linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px', '16px 16px');
+  }
+  if(gridStyle === 'squares'){
+    add('linear-gradient(var(--text-dimmer) 1px, transparent 1px)', '20px 20px');
+    add('linear-gradient(90deg, var(--text-dimmer) 1px, transparent 1px)', '20px 20px');
+  } else if(gridStyle === 'dots'){
+    add('radial-gradient(var(--text-dimmer) 0.5px, transparent 0.5px)', '20px 20px');
+  }
+  let color = 'var(--bg)';
+  if(bg === 'white') color = '#ffffff';
+  else if(bg === 'black') color = '#000000';
+  else if(bg === 'grey') color = '#e5e7eb';
+  else if(bg === 'custom') color = selCanvasColor.value;
+  canvasScroll.style.backgroundColor = color;
+  canvasScroll.style.backgroundImage = image || 'none';
+  canvasScroll.style.backgroundSize = size || 'auto';
+  canvasScroll.style.backgroundPosition = '0 0';
+  canvasScroll.style.backgroundRepeat = 'repeat';
+  localStorage.setItem(CANVAS_BG_KEY, bg || 'transparent');
+  localStorage.setItem(GRID_STYLE_KEY, gridStyle || 'squares');
+  selCanvasColor.style.display = bg === 'custom' ? 'inline-block' : 'none';
+}
+
+function applyGridVisible(visible){
+  const gridLayer = document.getElementById('gridLayer');
+  if(gridLayer) gridLayer.style.display = visible ? '' : 'none';
+  localStorage.setItem('neryxsvg:gridVisible', visible ? '1' : '0');
+}
+
+// Load saved preferences
+const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+const savedBg = localStorage.getItem(CANVAS_BG_KEY) || 'transparent';
+const savedGrid = localStorage.getItem(GRID_STYLE_KEY) || 'squares';
+const savedGridVis = localStorage.getItem('neryxsvg:gridVisible') !== '0';
+
+selTheme.value = savedTheme;
+applyTheme(savedTheme);
+selCanvasBg.value = savedBg;
+applyCanvasBg(savedBg);
+selGridStyle.value = savedGrid;
+chkGrid.checked = savedGridVis;
+applyGridVisible(savedGridVis);
+
+selTheme.addEventListener('change', ()=>applyTheme(selTheme.value));
+selCanvasBg.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
+selCanvasColor.addEventListener('input', ()=>{
+  localStorage.setItem(CANVAS_COLOR_KEY, selCanvasColor.value);
+  applyCanvasBg(selCanvasBg.value);
+});
+chkGrid.addEventListener('change', ()=>applyGridVisible(chkGrid.checked));
+selGridStyle.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
