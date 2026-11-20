@@ -30,16 +30,20 @@
             <div id="topbar">
                 <a class="brand" href="index.html">NeryxSVG<small>SVG editor</small></a>
                 <div class="topgroup">
-                    <button id="btnOpenProject" title="Open a NeryxSVG project (.nsvg) or an SVG file (Ctrl+O)">Open</button>
-                    <button id="btnSaveProject" title="Save project (Ctrl+S)">Save</button>
-                    <button id="btnSaveProjectAs" title="Save project as a new file (Ctrl+Shift+S)">Save As</button>
-                </div>
-                <div class="topgroup">
                     <button id="btnNew" title="New document">New</button>
                     <button id="btnImport" title="Import SVG file">Import SVG</button>
-                    <button id="btnExport" title="Export SVG file">Export SVG</button>
-                    <button id="btnExportPng" title="Export PNG file">Export PNG</button>
-                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkExportSelection"> Selection only</label>
+                    <div class="dropdown" id="btnExport" title="Export SVG or PNG">
+                        Export
+                        <span class="chev">▾</span>
+                        <div id="exportMenu" class="dropdown-menu">
+                            <label class="dropdown-item" style="display:flex;align-items:center;gap:6px;padding:4px 8px;">
+                                <input type="checkbox" id="chkExportSelection"> Selection only
+                            </label>
+                            <div class="dropdown-separator"></div>
+                            <button id="exportMenuSvg" class="dropdown-item">Export SVG</button>
+                            <button id="exportMenuPng" class="dropdown-item">Export PNG</button>
+                        </div>
+                    </div>
                     <button id="btnFitPage" title="Set the exported page size to fit current content (until you fit again)">Fit Page</button>
                 </div>
                 <div class="topgroup">
@@ -134,6 +138,21 @@
         <input type="file" id="fileInput" class="hidden-file-input" accept=".svg,image/svg+xml">
         <input type="file" id="projectFileInput" class="hidden-file-input" accept=".nsvg,.svg,application/json,image/svg+xml">
         <div class="toast" id="toast"></div>
+
+        <div id="descriptionPopup" class="description-popup">
+            <div class="description-popup-inner">
+                <h3>NeryxSVG — Free Online SVG Editor</h3>
+                <p>Create vector graphics visually, edit SVG source code, fine-tune coordinates, manipulate Bézier paths, and export clean SVG files. No installation required.</p>
+                <p><strong>Tip:</strong> Use the Export button to save your work as SVG or PNG. Select elements first to export only your selection.</p>
+                <div class="description-popup-actions">
+                    <label class="description-popup-checkbox" style="display:flex;align-items:center;gap:6px;">
+                        <input type="checkbox" id="popupDontShow"> Don't show again
+                    </label>
+                    <button id="popupClose" class="btn btn-primary btn-small">Close</button>
+                </div>
+            </div>
+        </div>
+
         <script type="module" src="/js/app/main.js"></script>
     </body>
 </html>

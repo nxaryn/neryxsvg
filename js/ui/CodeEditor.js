@@ -391,9 +391,13 @@ function exportPng(elements){
   img.src = url;
 }
 
-document.getElementById('btnExport').addEventListener('click', ()=>{
+function doExport(format){
   const elements = getExportElements();
   if(!elements) return;
+  if(format === 'png'){
+    exportPng(elements);
+    return;
+  }
   const src = serializeSVG(doc(), elements);
   const blob = new Blob([src], {type:'image/svg+xml'});
   const url = URL.createObjectURL(blob);
@@ -402,12 +406,34 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
   toast('SVG exported');
+}
+
+document.getElementById('btnExport').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  const menu = document.getElementById('exportMenu');
+  menu.classList.toggle('show');
+});
+document.getElementById('exportMenuSvg').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  document.getElementById('exportMenu').classList.remove('show');
+  doExport('svg');
+});
+document.getElementById('exportMenuPng').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  document.getElementById('exportMenu').classList.remove('show');
+  doExport('png');
+});
+document.getElementById('chkExportSelection').addEventListener('change', (e)=>{
+  e.stopPropagation();
 });
 
-document.getElementById('btnExportPng').addEventListener('click', ()=>{
-  const elements = getExportElements();
-  if(!elements) return;
-  exportPng(elements);
+// Close dropdown when clicking outside
+document.addEventListener('click', (e)=>{
+  const menu = document.getElementById('exportMenu');
+  const btn = document.getElementById('btnExport');
+  if(menu && btn && !menu.contains(e.target) && e.target !== btn){
+    menu.classList.remove('show');
+  }
 });
 
 /* --- Editor Themes & Canvas Background --- */
@@ -423,10 +449,17 @@ const chkGrid = document.getElementById('chkGrid');
 const selGridStyle = document.getElementById('selGridStyle');
 const canvasScroll = document.getElementById('canvasScroll');
 
+function lsGet(key, def){
+  try{ const v = localStorage.getItem(key); return v != null ? v : def; }catch(e){ return def; }
+}
+function lsSet(key, val){
+  try{ localStorage.setItem(key, val); }catch(e){}
+}
+
 function applyTheme(theme){
   document.body.className = '';
   if(theme && theme !== 'dark') document.body.classList.add('theme-' + theme);
-  localStorage.setItem(THEME_KEY, theme || 'dark');
+  lsSet(THEME_KEY, theme || 'dark');
 }
 
 function applyCanvasBg(bg){
@@ -457,22 +490,22 @@ function applyCanvasBg(bg){
   canvasScroll.style.backgroundSize = size || 'auto';
   canvasScroll.style.backgroundPosition = '0 0';
   canvasScroll.style.backgroundRepeat = 'repeat';
-  localStorage.setItem(CANVAS_BG_KEY, bg || 'transparent');
-  localStorage.setItem(GRID_STYLE_KEY, gridStyle || 'squares');
+  lsSet(CANVAS_BG_KEY, bg || 'transparent');
+  lsSet(GRID_STYLE_KEY, gridStyle || 'squares');
   selCanvasColor.style.display = bg === 'custom' ? 'inline-block' : 'none';
 }
 
 function applyGridVisible(visible){
   const gridLayer = document.getElementById('gridLayer');
   if(gridLayer) gridLayer.style.display = visible ? '' : 'none';
-  localStorage.setItem('neryxsvg:gridVisible', visible ? '1' : '0');
+  lsSet('neryxsvg:gridVisible', visible ? '1' : '0');
 }
 
 // Load saved preferences
-const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
-const savedBg = localStorage.getItem(CANVAS_BG_KEY) || 'transparent';
-const savedGrid = localStorage.getItem(GRID_STYLE_KEY) || 'squares';
-const savedGridVis = localStorage.getItem('neryxsvg:gridVisible') !== '0';
+const savedTheme = lsGet(THEME_KEY, 'dark');
+const savedBg = lsGet(CANVAS_BG_KEY, 'transparent');
+const savedGrid = lsGet(GRID_STYLE_KEY, 'squares');
+const savedGridVis = lsGet('neryxsvg:gridVisible', '1') !== '0';
 
 selTheme.value = savedTheme;
 applyTheme(savedTheme);
@@ -485,8 +518,33 @@ applyGridVisible(savedGridVis);
 selTheme.addEventListener('change', ()=>applyTheme(selTheme.value));
 selCanvasBg.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
 selCanvasColor.addEventListener('input', ()=>{
-  localStorage.setItem(CANVAS_COLOR_KEY, selCanvasColor.value);
+  lsSet(CANVAS_COLOR_KEY, selCanvasColor.value);
   applyCanvasBg(selCanvasBg.value);
 });
 chkGrid.addEventListener('change', ()=>applyGridVisible(chkGrid.checked));
 selGridStyle.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
+
+/* --- Description Popup --- */
+const POPUP_KEY = 'neryxsvg:popupShown';
+const popup = document.getElementById('descriptionPopup');
+const popupClose = document.getElementById('popupClose');
+const popupDontShow = document.getElementById('popupDontShow');
+
+function showDescriptionPopup(){
+  if(lsGet(POPUP_KEY, '0') === '1') return;
+  popup.classList.add('show');
+}
+function hideDescriptionPopup(){
+  popup.classList.remove('show');
+  if(popupDontShow.checked){
+    lsSet(POPUP_KEY, '1');
+  }
+}
+
+popupClose.addEventListener('click', hideDescriptionPopup);
+popupDontShow.addEventListener('change', ()=>{
+  if(popupDontShow.checked) lsSet(POPUP_KEY, '1');
+});
+
+// Show popup after a short delay so the UI is visible first
+setTimeout(showDescriptionPopup, 300);

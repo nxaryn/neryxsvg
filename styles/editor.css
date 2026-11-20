@@ -690,3 +690,97 @@ button:focus-visible{ outline-offset: 2px; }
   margin: 0;
   color: var(--text-dim);
 }
+
+/* Dropdown menu for Export button */
+.dropdown{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2px 4px;
+  cursor: pointer;
+  color: var(--text);
+}
+.dropdown:hover{ background: var(--panel); border-color: var(--border-soft); }
+.dropdown .chev{ font-size: 10px; }
+.dropdown-menu{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 140px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  z-index: 100;
+  display: none;
+  padding: 4px 0;
+}
+.dropdown-menu.show{ display: block; }
+.dropdown-item{
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+.dropdown-item:hover{ background: var(--panel-2); color: var(--accent-strong); }
+.dropdown-separator{
+  height: 1px;
+  background: var(--border-soft);
+  margin: 4px 0;
+}
+
+/* Description popup */
+#descriptionPopup{
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#descriptionPopup.show{ display: flex; }
+.description-popup-inner{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  color: var(--text);
+}
+.description-popup-inner h3{
+  margin: 0 0 10px;
+  font-size: 16px;
+  color: var(--text);
+}
+.description-popup-inner p{
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.description-popup-actions{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  gap: 12px;
+}
+.description-popup-checkbox{
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.description-popup-checkbox input{ margin: 0; }
