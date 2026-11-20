@@ -152,7 +152,7 @@ export function serializeSVG(doc, topLevelEls){
   const defsBlock = (doc.defs||[]).filter(g=>usedIds.has(g.id)).map(defToMarkup).join('\n');
   const defs = defsBlock ? `<defs>\n${defsBlock}\n</defs>\n` : '';
   const body = topLevelEls.map(el=>elementToMarkup(doc, el, 1)).filter(Boolean).join('\n');
-  const rootAttrs = doc.rootAttrs ? Object.entries(doc.rootAttrs).map(([k,v])=>` ${k}="${escapeXml(v)}"`).join('') : '';
+  const rootAttrs = doc.rootAttrs ? Object.entries(doc.rootAttrs).filter(([k])=>k!=='width'&&k!=='height').map(([k,v])=>` ${k}="${escapeXml(v)}"`).join('') : '';
   const title = doc.metadata.title ? `\n  <title>${escapeXml(doc.metadata.title)}</title>` : '';
   const desc = doc.metadata.desc ? `\n  <desc>${escapeXml(doc.metadata.desc)}</desc>` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${round2(b.x)} ${round2(b.y)} ${round2(b.w)} ${round2(b.h)}" width="${round2(b.w)}" height="${round2(b.h)}"${rootAttrs}>${title}${desc}\n${defs}${body}\n</svg>`;
