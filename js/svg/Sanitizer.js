@@ -27,6 +27,8 @@ const ALLOWED_TAGS = new Set([
   'svg','g','defs','symbol','use',
   'rect','circle','ellipse','line','polygon','polyline','path','text','tspan',
   'lineargradient','radialgradient','stop',
+  'filter','fegaussianblur',
+  'pattern',
   'title','desc',
 ]);
 
@@ -43,6 +45,8 @@ const ALLOWED_ATTRS = new Set([
   'font-size','font-family','font-weight','font-style','text-anchor',
   'letter-spacing',
   'offset','stop-color','stop-opacity','gradientunits',
+  'filterunits','patternunits','patterncontentunits',
+  'filter',
   'href','xlink:href',
 ]);
 
@@ -114,6 +118,7 @@ export function sanitizeElementTree(rootEl){
     });
     sanitizeUrlRefAttr(node, 'fill');
     sanitizeUrlRefAttr(node, 'stroke');
+    sanitizeUrlRefAttr(node, 'filter');
   });
 
   Array.from(rootEl.attributes || []).forEach(attr=>{
