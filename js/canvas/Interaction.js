@@ -60,7 +60,7 @@ function resolveClickTarget(hitId){
     }
     return cur ? { id:cur.id, exitGroup:false } : { id:null, exitGroup:true };
   }
-  return { id: getTopLevelAncestor(doc(), el).id, exitGroup:false };
+  return { id: hitId, exitGroup:false };
 }
 
 
