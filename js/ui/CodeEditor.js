@@ -449,12 +449,17 @@ const THEME_KEY = 'neryxsvg:theme';
 const CANVAS_BG_KEY = 'neryxsvg:canvasBg';
 const CANVAS_COLOR_KEY = 'neryxsvg:canvasColor';
 const GRID_STYLE_KEY = 'neryxsvg:gridStyle';
+const GRID_VISIBLE_KEY = 'neryxsvg:gridVisible';
+const CODE_PANEL_KEY = 'neryxsvg:codePanel';
 
 const selTheme = document.getElementById('selTheme');
 const selCanvasBg = document.getElementById('selCanvasBg');
 const selCanvasColor = document.getElementById('selCanvasColor');
 const chkGrid = document.getElementById('chkGrid');
 const selGridStyle = document.getElementById('selGridStyle');
+const chkSnap = document.getElementById('chkSnap');
+const gridSizeInput = document.getElementById('gridSizeInput');
+const chkCodePanel = document.getElementById('chkCodePanel');
 const canvasScroll = document.getElementById('canvasScroll');
 
 function lsGet(key, def){
@@ -506,14 +511,25 @@ function applyCanvasBg(bg){
 function applyGridVisible(visible){
   const gridLayer = document.getElementById('gridLayer');
   if(gridLayer) gridLayer.style.display = visible ? '' : 'none';
-  lsSet('neryxsvg:gridVisible', visible ? '1' : '0');
+  lsSet(GRID_VISIBLE_KEY, visible ? '1' : '0');
+}
+
+function applyCodePanel(visible){
+  const bottomPanel = document.getElementById('bottomPanel');
+  if(visible){
+    bottomPanel.classList.remove('collapsed');
+  } else {
+    bottomPanel.classList.add('collapsed');
+  }
+  lsSet(CODE_PANEL_KEY, visible ? '1' : '0');
 }
 
 // Load saved preferences
 const savedTheme = lsGet(THEME_KEY, 'dark');
 const savedBg = lsGet(CANVAS_BG_KEY, 'transparent');
 const savedGrid = lsGet(GRID_STYLE_KEY, 'squares');
-const savedGridVis = lsGet('neryxsvg:gridVisible', '1') !== '0';
+const savedGridVis = lsGet(GRID_VISIBLE_KEY, '1') !== '0';
+const savedCodePanel = lsGet(CODE_PANEL_KEY, '1') !== '0';
 
 selTheme.value = savedTheme;
 applyTheme(savedTheme);
@@ -522,6 +538,10 @@ applyCanvasBg(savedBg);
 selGridStyle.value = savedGrid;
 chkGrid.checked = savedGridVis;
 applyGridVisible(savedGridVis);
+chkSnap.checked = lsGet('neryxsvg:snap', '1') !== '0';
+gridSizeInput.value = lsGet('neryxsvg:gridSize', '10');
+chkCodePanel.checked = savedCodePanel;
+applyCodePanel(savedCodePanel);
 
 selTheme.addEventListener('change', ()=>applyTheme(selTheme.value));
 selCanvasBg.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
@@ -531,6 +551,66 @@ selCanvasColor.addEventListener('input', ()=>{
 });
 chkGrid.addEventListener('change', ()=>applyGridVisible(chkGrid.checked));
 selGridStyle.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
+chkSnap.addEventListener('change', ()=>lsSet('neryxsvg:snap', chkSnap.checked ? '1' : '0'));
+gridSizeInput.addEventListener('change', ()=>lsSet('neryxsvg:gridSize', gridSizeInput.value));
+chkCodePanel.addEventListener('change', ()=>applyCodePanel(chkCodePanel.checked));
+
+/* --- Settings Popup --- */
+const settingsPopup = document.getElementById('settingsPopup');
+const settingsClose = document.getElementById('settingsClose');
+const btnSettings = document.getElementById('btnSettings');
+
+function openSettings(){
+  settingsPopup.classList.add('show');
+}
+function closeSettings(){
+  settingsPopup.classList.remove('show');
+}
+
+btnSettings.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  openSettings();
+});
+settingsClose.addEventListener('click', closeSettings);
+
+// Close settings when clicking outside
+settingsPopup.addEventListener('click', (e)=>{
+  if(e.target === settingsPopup) closeSettings();
+});
+
+/* --- Toolbar Tools --- */
+const toolBtns = document.querySelectorAll('.tool-btn');
+let currentTool = 'select';
+
+function setTool(tool){
+  currentTool = tool;
+  toolBtns.forEach(btn=>{
+    if(btn.dataset.tool === tool){
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  state.tool = tool;
+  const svgRoot = document.getElementById('svgRoot');
+  if(tool === 'select'){
+    svgRoot.classList.add('tool-select');
+    svgRoot.style.cursor = 'default';
+  } else {
+    svgRoot.classList.remove('tool-select');
+    svgRoot.style.cursor = 'crosshair';
+  }
+}
+
+toolBtns.forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    setTool(btn.dataset.tool);
+  });
+});
+
+// Initialize with select tool
+setTool('select');
 
 /* --- Description Popup --- */
 const POPUP_KEY = 'neryxsvg:popupShown';

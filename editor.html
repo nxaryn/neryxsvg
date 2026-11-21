@@ -61,13 +61,7 @@
                     <button id="btnZoom100" title="100%">1:1</button>
                 </div>
                 <div class="topgroup">
-                    <label style="display:flex;align-items:center;gap:5px;"><select id="selTheme" style="font-size:11px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);"><option value="dark">Theme: Dark</option><option value="light">Theme: Light</option><option value="midnight">Theme: Midnight</option></select></label>
-                    <label style="display:flex;align-items:center;gap:5px;"><select id="selCanvasBg" style="font-size:11px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);"><option value="transparent">Bg: Transparent</option><option value="white">Bg: White</option><option value="black">Bg: Black</option><option value="grey">Bg: Grey</option><option value="custom">Bg: Custom</option></select></label>
-                    <input type="color" id="selCanvasColor" value="#0a0d10" style="width:24px;height:24px;border:none;border-radius:3px;padding:0;cursor:pointer;display:none;">
-                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkGrid" checked> Grid</label>
-                    <label style="display:flex;align-items:center;gap:5px;"><select id="selGridStyle" style="font-size:11px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);"><option value="squares">Squares</option><option value="dots">Dots</option><option value="none">None</option></select></label>
-                    <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" id="chkSnap" checked> Snap</label>
-                    <label style="display:flex;align-items:center;gap:5px;">Spacing <input id="gridSizeInput" type="number" value="10" min="1" style="width:50px;"></label>
+                    <button id="btnSettings" title="Settings">⚙</button>
                 </div>
                 <div class="topgroup">
                     <button id="btnGroup" title="Group (Ctrl+G)">Group</button>
@@ -79,7 +73,18 @@
                 </div>
             </div>
         <div id="body">
-            <div id="toolbar"></div>
+            <div id="toolbar">
+                <button class="tool-btn" data-tool="select" title="Select (V)">S</button>
+                <button class="tool-btn" data-tool="rect" title="Rectangle (R)">▭</button>
+                <button class="tool-btn" data-tool="rrect" title="Rounded Rect (O)">▭</button>
+                <button class="tool-btn" data-tool="circle" title="Circle (C)">○</button>
+                <button class="tool-btn" data-tool="ellipse" title="Ellipse (E)">○</button>
+                <button class="tool-btn" data-tool="line" title="Line (L)">—</button>
+                <button class="tool-btn" data-tool="polygon" title="Polygon (G)">⬡</button>
+                <button class="tool-btn" data-tool="polyline" title="Polyline (Y)">⬯</button>
+                <button class="tool-btn" data-tool="path" title="Path (P)">✎</button>
+                <button class="tool-btn" data-tool="text" title="Text (T)">A</button>
+            </div>
                 <div id="canvasWrap">
                     <div id="cornerBox"></div>
                     <canvas id="rulerTop"></canvas>
@@ -152,6 +157,57 @@
                         <input type="checkbox" id="popupDontShow"> Don't show again
                     </label>
                     <button id="popupClose" class="btn btn-primary btn-small">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="settingsPopup" class="settings-popup">
+            <div class="settings-popup-inner">
+                <h3>Settings</h3>
+                <div class="settings-section">
+                    <h4>Theme</h4>
+                    <select id="selTheme" style="width:100%;padding:4px 8px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                        <option value="midnight">Midnight</option>
+                    </select>
+                </div>
+                <div class="settings-section">
+                    <h4>Canvas Background</h4>
+                    <select id="selCanvasBg" style="width:100%;padding:4px 8px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;">
+                        <option value="transparent">Transparent</option>
+                        <option value="white">White</option>
+                        <option value="black">Black</option>
+                        <option value="grey">Grey</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <input type="color" id="selCanvasColor" value="#0a0d10" style="width:100%;height:28px;border:none;border-radius:3px;padding:0;cursor:pointer;margin-top:4px;">
+                </div>
+                <div class="settings-section">
+                    <h4>Grid</h4>
+                    <label style="display:flex;align-items:center;gap:6px;">
+                        <input type="checkbox" id="chkGrid" checked> Show Grid
+                    </label>
+                    <select id="selGridStyle" style="width:100%;padding:4px 8px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;margin-top:4px;">
+                        <option value="squares">Squares</option>
+                        <option value="dots">Dots</option>
+                        <option value="none">None</option>
+                    </select>
+                    <label style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                        <input type="checkbox" id="chkSnap" checked> Snap to Grid
+                    </label>
+                    <label style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                        Spacing <input id="gridSizeInput" type="number" value="10" min="1" style="width:60px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;">
+                    </label>
+                </div>
+                <div class="settings-section">
+                    <h4>Code Panel</h4>
+                    <label style="display:flex;align-items:center;gap:6px;">
+                        <input type="checkbox" id="chkCodePanel" checked> Show Code Panel
+                    </label>
+                </div>
+                <div class="settings-popup-actions">
+                    <button id="settingsClose" class="btn btn-primary btn-small">Close</button>
                 </div>
             </div>
         </div>

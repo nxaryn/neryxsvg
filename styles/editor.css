@@ -751,3 +751,71 @@ button:focus-visible{ outline-offset: 2px; }
 #app input, #app textarea, #app select{
   user-select: auto;
 }
+
+/* Toolbar buttons */
+#toolbar{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+}
+.tool-btn{
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+.tool-btn:hover{ background: var(--panel); border-color: var(--border-soft); color: var(--text); }
+.tool-btn.active{ background: var(--accent-dim); border-color: var(--accent-dim); color: var(--accent-strong); }
+
+/* Settings popup */
+#settingsPopup{
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#settingsPopup.show{ display: flex; }
+.settings-popup-inner{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  color: var(--text);
+}
+.settings-popup-inner h3{
+  margin: 0 0 16px;
+  font-size: 16px;
+  color: var(--text);
+}
+.settings-section{
+  margin-bottom: 16px;
+}
+.settings-section h4{
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.settings-popup-actions{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
