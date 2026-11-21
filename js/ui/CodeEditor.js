@@ -578,40 +578,6 @@ settingsPopup.addEventListener('click', (e)=>{
   if(e.target === settingsPopup) closeSettings();
 });
 
-/* --- Toolbar Tools --- */
-const toolBtns = document.querySelectorAll('.tool-btn');
-let currentTool = 'select';
-
-function setTool(tool){
-  currentTool = tool;
-  toolBtns.forEach(btn=>{
-    if(btn.dataset.tool === tool){
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-  state.tool = tool;
-  const svgRoot = document.getElementById('svgRoot');
-  if(tool === 'select'){
-    svgRoot.classList.add('tool-select');
-    svgRoot.style.cursor = 'default';
-  } else {
-    svgRoot.classList.remove('tool-select');
-    svgRoot.style.cursor = 'crosshair';
-  }
-}
-
-toolBtns.forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    setTool(btn.dataset.tool);
-  });
-});
-
-// Initialize with select tool
-setTool('select');
-
 /* --- Description Popup --- */
 const POPUP_KEY = 'neryxsvg:popupShown';
 const popup = document.getElementById('descriptionPopup');
