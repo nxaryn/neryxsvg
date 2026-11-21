@@ -560,7 +560,20 @@ const settingsPopup = document.getElementById('settingsPopup');
 const settingsClose = document.getElementById('settingsClose');
 const btnSettings = document.getElementById('btnSettings');
 
+function syncSettingsControls(){
+  selTheme.value = lsGet(THEME_KEY, 'dark');
+  selCanvasBg.value = lsGet(CANVAS_BG_KEY, 'transparent');
+  selCanvasColor.value = lsGet(CANVAS_COLOR_KEY, '#0a0d10');
+  selGridStyle.value = lsGet(GRID_STYLE_KEY, 'squares');
+  chkGrid.checked = lsGet(GRID_VISIBLE_KEY, '1') !== '0';
+  chkSnap.checked = lsGet('neryxsvg:snap', '1') !== '0';
+  gridSizeInput.value = lsGet('neryxsvg:gridSize', '10');
+  chkCodePanel.checked = lsGet(CODE_PANEL_KEY, '1') !== '0';
+  selCanvasColor.style.display = selCanvasBg.value === 'custom' ? 'inline-block' : 'none';
+}
+
 function openSettings(){
+  syncSettingsControls();
   settingsPopup.classList.add('show');
 }
 function closeSettings(){
