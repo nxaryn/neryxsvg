@@ -5,6 +5,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { JSDOM } from 'jsdom';
 import 'fake-indexeddb/auto';
 
@@ -24,8 +25,8 @@ for(const key of ['window', 'document', 'navigator', 'DOMParser', 'Node', 'Eleme
   }
 }
 for(const script of window.document.querySelectorAll('script[type="module"]')){
-  const modPath = path.resolve(path.join(root, script.getAttribute('src')));
-  await import(modPath).catch(err=>{ console.error('Boot failed:', err); process.exit(1); });
+  const modPath = path.resolve(root, '.' + script.getAttribute('src'));
+  await import(pathToFileURL(modPath).href).catch(err=>{ console.error('Boot failed:', err); process.exit(1); });
 }
 await new Promise(r=>setTimeout(r, 20));
 

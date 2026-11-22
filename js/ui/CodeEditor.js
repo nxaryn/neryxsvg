@@ -8,7 +8,7 @@ import { parseDToCommands } from '../svg/PathParser.js';
 import { parseTransformAttr } from '../svg/TransformParser.js';
 import { sanitizeElementTree, assertNoDangerousXmlDeclarations } from '../svg/Sanitizer.js';
 import { renderAll } from '../app/renderAll.js';
-import { fitToContent } from '../canvas/Navigation.js';
+import { fitToContent, renderView } from '../canvas/Navigation.js';
 import { replaceDocument } from '../canvas/Interaction.js';
 
 function doc(){ return state.document; }
@@ -22,43 +22,64 @@ function toast(msg){
 }
 
 const codeText = document.getElementById('codeText');
-const codeHighlight = document.getElementById('codeHighlight').querySelector('code');
+const codeHighlightPre = document.getElementById('codeHighlight');
+const codeHighlight = codeHighlightPre.querySelector('code');
 let codeEditingByUser = false;
+let lastSyncedSource = '';
 
 function highlightXML(src){
-  return src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/(&lt;\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?&gt;)/g,
-      (match, openTag, tagName, rest, closeTag) => {
-        const highlightedRest = rest.replace(/([a-zA-Z-]+)(=)(&quot;|")([^"]*)(&quot;|")/g,
-          '<span class="tok-attr">$1</span>$2<span class="tok-str">$3$4$5</span>');
-        return `${openTag}<span class="tok-tag">${tagName}</span>${highlightedRest}<span class="tok-punc">${closeTag}</span>`;
-      });
+  const escaped = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return escaped.replace(/(&lt;\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?&gt;)/g,
+    (match, openTag, tagName, rest, closeTag) => {
+      const highlightedRest = rest.replace(/([a-zA-Z-]+)(=)(")([^"]*)(")/g,
+        '<span class="tok-attr">$1</span>$2<span class="tok-str">$3$4$5</span>');
+      return `${openTag}<span class="tok-tag">${tagName}</span>${highlightedRest}<span class="tok-punc">${closeTag}</span>`;
+    });
 }
 
 export function syncCodePanel(){
   if(codeEditingByUser) return;
   const topLevel = doc().elements.filter(e=>!e.parentId);
   const src = serializeSVG(doc(), topLevel);
+  if(src === lastSyncedSource && codeText.value === src) return;
+  lastSyncedSource = src;
   codeText.value = src;
   codeHighlight.innerHTML = highlightXML(src);
+  syncCodeScroll();
 }
 
-const codeHighlightPre = document.getElementById('codeHighlight');
-codeText.addEventListener('scroll', ()=>{
+// The highlight layer is a <pre> behind a transparent <textarea>. Both scroll
+// independently, so mirror the textarea's offset onto the <pre> every frame
+// instead of only on the scroll event (which fires before layout settles).
+function syncCodeScroll(){
   codeHighlightPre.scrollTop = codeText.scrollTop;
   codeHighlightPre.scrollLeft = codeText.scrollLeft;
-});
+}
+codeText.addEventListener('scroll', syncCodeScroll);
 codeText.addEventListener('focus', ()=>{ codeEditingByUser = true; });
-codeText.addEventListener('input', ()=>{ codeHighlight.innerHTML = highlightXML(codeText.value); });
+codeText.addEventListener('input', ()=>{
+  codeHighlight.innerHTML = highlightXML(codeText.value);
+  syncCodeScroll();
+});
 codeText.addEventListener('blur', ()=>{
+  if(!codeEditingByUser) return;
   codeEditingByUser = false;
+  const next = codeText.value;
+  if(next === lastSyncedSource) return;
   try{
-    importSVGSource(codeText.value, true);
+    importSVGSource(next, true);
+    lastSyncedSource = next;
   }catch(err){
-    toast('Could not parse SVG source');
-    syncCodePanel();
+    // Keep the user's text visible so they can fix it rather than losing it.
+    toast('Could not parse SVG source \u2014 your edits are still in the panel');
+    codeHighlight.innerHTML = highlightXML(next);
   }
 });
+
+// Keep the highlight layer aligned when the panel is resized or re-shown.
+if(typeof ResizeObserver === 'function'){
+  new ResizeObserver(syncCodeScroll).observe(document.getElementById('codeEditorWrap'));
+}
 
 document.getElementById('codeTabHeader').addEventListener('click', (e)=>{
   if(e.target.id==='btnCopySvg') return;
@@ -369,20 +390,25 @@ function exportPng(elements){
   const url = URL.createObjectURL(svgBlob);
   const img = new Image();
   img.onload = ()=>{
-    const w = img.width || 800;
-    const h = img.height || 600;
+    // Prefer the explicit width/height the serialiser wrote into the SVG;
+    // img.width/height are unreliable for SVG blobs in several browsers.
+    const w = Math.max(1, Math.round(img.naturalWidth || img.width || doc().width || 800));
+    const h = Math.max(1, Math.round(img.naturalHeight || img.height || doc().height || 600));
     const canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, w, h);
-    const pngUrl = canvas.toDataURL('image/png');
-    const a = document.createElement('a');
-    a.href = pngUrl; a.download = 'drawing.png';
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(pngUrl);
-    URL.revokeObjectURL(url);
-    toast('PNG exported');
+    canvas.toBlob(blob=>{
+      URL.revokeObjectURL(url);
+      if(!blob){ toast('PNG export failed'); return; }
+      const pngUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = pngUrl; a.download = 'drawing.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(pngUrl);
+      toast('PNG exported');
+    }, 'image/png');
   };
   img.onerror = ()=>{
     URL.revokeObjectURL(url);
@@ -450,6 +476,8 @@ const CANVAS_BG_KEY = 'neryxsvg:canvasBg';
 const CANVAS_COLOR_KEY = 'neryxsvg:canvasColor';
 const GRID_STYLE_KEY = 'neryxsvg:gridStyle';
 const GRID_VISIBLE_KEY = 'neryxsvg:gridVisible';
+const GRID_SIZE_KEY = 'neryxsvg:gridSize';
+const SNAP_KEY = 'neryxsvg:snap';
 const CODE_PANEL_KEY = 'neryxsvg:codePanel';
 
 const selTheme = document.getElementById('selTheme');
@@ -462,56 +490,78 @@ const gridSizeInput = document.getElementById('gridSizeInput');
 const chkCodePanel = document.getElementById('chkCodePanel');
 const canvasScroll = document.getElementById('canvasScroll');
 
+// Resolve localStorage lazily against `window`. Reaching for a bare
+// `localStorage` identifier throws in non-browser contexts (and in jsdom-based
+// tests), and the try/catch below would silently swallow it, losing every
+// preference without any visible error.
+function lsStore(){
+  try{ return (typeof window !== 'undefined' && window.localStorage) || null; }
+  catch(e){ return null; }
+}
 function lsGet(key, def){
-  try{ const v = localStorage.getItem(key); return v != null ? v : def; }catch(e){ return def; }
+  const store = lsStore();
+  if(!store) return def;
+  try{ const v = store.getItem(key); return v != null ? v : def; }catch(e){ return def; }
 }
 function lsSet(key, val){
-  try{ localStorage.setItem(key, val); }catch(e){}
+  const store = lsStore();
+  if(!store) return;
+  try{ store.setItem(key, val); }catch(e){}
 }
 
+// Only touch the theme class so unrelated body classes survive.
 function applyTheme(theme){
-  document.body.className = '';
-  if(theme && theme !== 'dark') document.body.classList.add('theme-' + theme);
+  const wanted = theme && theme !== 'dark' ? 'theme-' + theme : '';
+  Array.from(document.body.classList)
+    .filter(c=>c.indexOf('theme-') === 0 && c !== wanted)
+    .forEach(c=>document.body.classList.remove(c));
+  if(wanted && !document.body.classList.contains(wanted)) document.body.classList.add(wanted);
   lsSet(THEME_KEY, theme || 'dark');
 }
 
+// Drive the canvas background through the .bg-* / .grid-* classes that already
+// exist in editor.css instead of writing inline styles, so the values stay
+// theme-aware and the stylesheet remains the single source of truth.
+const CANVAS_BG_CLASSES = ['bg-transparent','bg-white','bg-black','bg-grey'];
+const GRID_STYLE_CLASSES = ['grid-squares','grid-dots','grid-none'];
+
 function applyCanvasBg(bg){
   const gridStyle = selGridStyle.value;
-  let image = '';
-  let size = '';
-  const add = function(part, sz){
-    image = image ? image + ', ' + part : part;
-    size = size ? size + ', ' + sz : sz;
-  };
-  if(bg === 'transparent'){
-    add('linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px', '16px 16px');
-    add('linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px', '16px 16px');
-  }
-  if(gridStyle === 'squares'){
-    add('linear-gradient(var(--text-dimmer) 1px, transparent 1px)', '20px 20px');
-    add('linear-gradient(90deg, var(--text-dimmer) 1px, transparent 1px)', '20px 20px');
-  } else if(gridStyle === 'dots'){
-    add('radial-gradient(var(--text-dimmer) 0.5px, transparent 0.5px)', '20px 20px');
-  }
-  let color = 'var(--bg)';
-  if(bg === 'white') color = '#ffffff';
-  else if(bg === 'black') color = '#000000';
-  else if(bg === 'grey') color = '#e5e7eb';
-  else if(bg === 'custom') color = selCanvasColor.value;
-  canvasScroll.style.backgroundColor = color;
-  canvasScroll.style.backgroundImage = image || 'none';
-  canvasScroll.style.backgroundSize = size || 'auto';
-  canvasScroll.style.backgroundPosition = '0 0';
-  canvasScroll.style.backgroundRepeat = 'repeat';
+  const color = lsGet(CANVAS_COLOR_KEY, '#0a0d10');
+
+  canvasScroll.classList.remove(...CANVAS_BG_CLASSES, ...GRID_STYLE_CLASSES);
+  canvasScroll.classList.add('bg-' + (bg || 'transparent'));
+  canvasScroll.classList.add('grid-' + (gridStyle || 'squares'));
+
+  // Custom colour is the one value the stylesheet can't express, so set it
+  // directly on the element and let the class handle the image layers.
+  if(bg === 'custom') canvasScroll.style.backgroundColor = color;
+  else canvasScroll.style.removeProperty('background-color');
+
   lsSet(CANVAS_BG_KEY, bg || 'transparent');
   lsSet(GRID_STYLE_KEY, gridStyle || 'squares');
   selCanvasColor.style.display = bg === 'custom' ? 'inline-block' : 'none';
 }
 
+// Grid visibility and snap live on `state` — that's what Navigation.js and
+// Interaction.js actually read. Mirror them into the DOM and localStorage.
 function applyGridVisible(visible){
+  state.gridVisible = !!visible;
   const gridLayer = document.getElementById('gridLayer');
   if(gridLayer) gridLayer.style.display = visible ? '' : 'none';
   lsSet(GRID_VISIBLE_KEY, visible ? '1' : '0');
+}
+
+function applySnap(enabled){
+  state.snap = !!enabled;
+  lsSet(SNAP_KEY, enabled ? '1' : '0');
+}
+
+function applyGridSize(value){
+  const n = Math.max(0.1, parseFloat(value) || 10);
+  state.document.settings.gridSize = n;
+  lsSet(GRID_SIZE_KEY, String(n));
+  return n;
 }
 
 function applyCodePanel(visible){
@@ -524,22 +574,28 @@ function applyCodePanel(visible){
   lsSet(CODE_PANEL_KEY, visible ? '1' : '0');
 }
 
-// Load saved preferences
+// Load saved preferences. Order matters: the colour must be restored before
+// applyCanvasBg() runs so the custom swatch is correct on first paint.
 const savedTheme = lsGet(THEME_KEY, 'dark');
 const savedBg = lsGet(CANVAS_BG_KEY, 'transparent');
 const savedGrid = lsGet(GRID_STYLE_KEY, 'squares');
 const savedGridVis = lsGet(GRID_VISIBLE_KEY, '1') !== '0';
+const savedSnap = lsGet(SNAP_KEY, '1') !== '0';
+const savedGridSize = lsGet(GRID_SIZE_KEY, '10');
 const savedCodePanel = lsGet(CODE_PANEL_KEY, '1') !== '0';
 
 selTheme.value = savedTheme;
 applyTheme(savedTheme);
 selCanvasBg.value = savedBg;
-applyCanvasBg(savedBg);
+selCanvasColor.value = lsGet(CANVAS_COLOR_KEY, '#0a0d10');
 selGridStyle.value = savedGrid;
+applyCanvasBg(savedBg);
 chkGrid.checked = savedGridVis;
 applyGridVisible(savedGridVis);
-chkSnap.checked = lsGet('neryxsvg:snap', '1') !== '0';
-gridSizeInput.value = lsGet('neryxsvg:gridSize', '10');
+chkSnap.checked = savedSnap;
+applySnap(savedSnap);
+gridSizeInput.value = savedGridSize;
+applyGridSize(savedGridSize);
 chkCodePanel.checked = savedCodePanel;
 applyCodePanel(savedCodePanel);
 
@@ -549,10 +605,16 @@ selCanvasColor.addEventListener('input', ()=>{
   lsSet(CANVAS_COLOR_KEY, selCanvasColor.value);
   applyCanvasBg(selCanvasBg.value);
 });
-chkGrid.addEventListener('change', ()=>applyGridVisible(chkGrid.checked));
+chkGrid.addEventListener('change', ()=>{
+  applyGridVisible(chkGrid.checked);
+  renderView();
+});
 selGridStyle.addEventListener('change', ()=>applyCanvasBg(selCanvasBg.value));
-chkSnap.addEventListener('change', ()=>lsSet('neryxsvg:snap', chkSnap.checked ? '1' : '0'));
-gridSizeInput.addEventListener('change', ()=>lsSet('neryxsvg:gridSize', gridSizeInput.value));
+chkSnap.addEventListener('change', ()=>applySnap(chkSnap.checked));
+gridSizeInput.addEventListener('change', ()=>{
+  gridSizeInput.value = applyGridSize(gridSizeInput.value);
+  renderView();
+});
 chkCodePanel.addEventListener('change', ()=>applyCodePanel(chkCodePanel.checked));
 
 /* --- Settings Popup --- */
@@ -566,18 +628,27 @@ function syncSettingsControls(){
   selCanvasColor.value = lsGet(CANVAS_COLOR_KEY, '#0a0d10');
   selGridStyle.value = lsGet(GRID_STYLE_KEY, 'squares');
   chkGrid.checked = lsGet(GRID_VISIBLE_KEY, '1') !== '0';
-  chkSnap.checked = lsGet('neryxsvg:snap', '1') !== '0';
-  gridSizeInput.value = lsGet('neryxsvg:gridSize', '10');
+  chkSnap.checked = lsGet(SNAP_KEY, '1') !== '0';
+  gridSizeInput.value = lsGet(GRID_SIZE_KEY, '10');
   chkCodePanel.checked = lsGet(CODE_PANEL_KEY, '1') !== '0';
   selCanvasColor.style.display = selCanvasBg.value === 'custom' ? 'inline-block' : 'none';
 }
 
+let settingsReturnFocus = null;
+
 function openSettings(){
   syncSettingsControls();
+  settingsReturnFocus = document.activeElement;
   settingsPopup.classList.add('show');
+  settingsPopup.removeAttribute('aria-hidden');
+  const first = settingsPopup.querySelector('select, input, button');
+  if(first) first.focus();
 }
 function closeSettings(){
   settingsPopup.classList.remove('show');
+  settingsPopup.setAttribute('aria-hidden', 'true');
+  if(settingsReturnFocus && settingsReturnFocus.isConnected) settingsReturnFocus.focus();
+  settingsReturnFocus = null;
 }
 
 btnSettings.addEventListener('click', (e)=>{
@@ -586,9 +657,12 @@ btnSettings.addEventListener('click', (e)=>{
 });
 settingsClose.addEventListener('click', closeSettings);
 
-// Close settings when clicking outside
+// Close settings when clicking outside, or on Escape.
 settingsPopup.addEventListener('click', (e)=>{
   if(e.target === settingsPopup) closeSettings();
+});
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && settingsPopup.classList.contains('show')) closeSettings();
 });
 
 /* --- Description Popup --- */
@@ -600,9 +674,13 @@ const popupDontShow = document.getElementById('popupDontShow');
 function showDescriptionPopup(){
   if(lsGet(POPUP_KEY, '0') === '1') return;
   popup.classList.add('show');
+  popup.removeAttribute('aria-hidden');
+  const first = popup.querySelector('button, input');
+  if(first) first.focus();
 }
 function hideDescriptionPopup(){
   popup.classList.remove('show');
+  popup.setAttribute('aria-hidden', 'true');
   if(popupDontShow.checked){
     lsSet(POPUP_KEY, '1');
   }
@@ -611,6 +689,9 @@ function hideDescriptionPopup(){
 popupClose.addEventListener('click', hideDescriptionPopup);
 popupDontShow.addEventListener('change', ()=>{
   if(popupDontShow.checked) lsSet(POPUP_KEY, '1');
+});
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && popup.classList.contains('show')) hideDescriptionPopup();
 });
 
 // Show popup after a short delay so the UI is visible first

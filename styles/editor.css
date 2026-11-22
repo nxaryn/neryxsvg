@@ -239,11 +239,17 @@ button:focus-visible{ outline-offset: 2px; }
 /* Canvas Backgrounds */
 #canvasScroll.bg-transparent{
   --canvas-bg-color: transparent;
+  --checker-tile: #10141a;
   --canvas-bg-image:
-    linear-gradient(45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px,
-    linear-gradient(-45deg, #10141a 25%, transparent 25%) -8px 0 / 16px 16px;
+    linear-gradient(45deg, var(--checker-tile) 25%, transparent 25%) -8px 0 / 16px 16px,
+    linear-gradient(-45deg, var(--checker-tile) 25%, transparent 25%) -8px 0 / 16px 16px;
   --canvas-bg-size: 16px 16px;
 }
+/* Light theme needs a light checkerboard, otherwise the transparency grid
+   reads as a dark block behind the artwork. */
+body.theme-light #canvasScroll.bg-transparent{ --checker-tile: #d8dde3; }
+body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
+
 #canvasScroll.bg-white{ --canvas-bg-color: #ffffff; --canvas-bg-image: none; }
 #canvasScroll.bg-black{ --canvas-bg-color: #000000; --canvas-bg-image: none; }
 #canvasScroll.bg-grey{ --canvas-bg-color: #e5e7eb; --canvas-bg-image: none; }
@@ -261,6 +267,12 @@ button:focus-visible{ outline-offset: 2px; }
   --canvas-bg-size: 20px 20px;
 }
 #canvasScroll.grid-none{ --canvas-bg-image: none; }
+
+/* A solid background colour must not keep the grid image from a previous
+   selection, so the bg-* rules above already reset --canvas-bg-image. */
+#canvasScroll.bg-white,
+#canvasScroll.bg-black,
+#canvasScroll.bg-grey{ --canvas-bg-size: auto; }
 
 #svgRoot{ display: block; cursor: default; }
 #svgRoot.tool-select{ cursor: default; }
@@ -702,7 +714,7 @@ button:focus-visible{ outline-offset: 2px; }
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 300;
+  z-index: 310;
   background: rgba(0,0,0,0.5);
   backdrop-filter: blur(2px);
   align-items: center;
@@ -796,6 +808,8 @@ button:focus-visible{ outline-offset: 2px; }
   padding: 24px;
   max-width: 420px;
   width: 100%;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
   color: var(--text);
 }
 .settings-popup-inner h3{
@@ -814,8 +828,46 @@ button:focus-visible{ outline-offset: 2px; }
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+.settings-section label{
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.settings-section input[type="checkbox"]{
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+.settings-section select,
+.settings-section input[type="number"]{
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.settings-section select:hover,
+.settings-section input[type="number"]:hover{
+  border-color: var(--text-dimmer);
+}
 .settings-popup-actions{
   display: flex;
   justify-content: flex-end;
   margin-top: 16px;
 }
+
+/* Buttons used inside the settings and description popups. These live outside
+   #topbar, so they need their own styling rather than inheriting the topbar
+   button rules. */
+.btn-primary{
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-dim);
+  color: var(--accent-strong);
+  border-radius: var(--radius);
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn-primary:hover{ background: var(--accent-dim); border-color: var(--accent-strong); color: var(--accent-strong); }
+.btn-small{ padding: 5px 12px; font-size: 12px; }

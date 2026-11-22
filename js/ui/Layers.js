@@ -1,5 +1,5 @@
 import { state } from '../app/State.js';
-import { getChildren, getElement, displayName } from '../document/Element.js';
+import { getChildren, getElement, getDescendantIds, displayName } from '../document/Element.js';
 import { makeReplaceElementsCommand } from '../document/Commands.js';
 import * as History from '../document/History.js';
 import { renderAll } from '../app/renderAll.js';
@@ -287,15 +287,14 @@ document.getElementById('layersList')?.addEventListener('click', (e)=>{
     renderAll();
   } else if(btn.classList.contains('btn-del')){
     const before = doc.elements;
-    const idsToRemove = new Set([el.id, ...getChildren(doc,el.id).map(c=>c.id)]);
-
-
-
-
-
+    // getDescendantIds walks the whole subtree; using only getChildren here
+    // orphaned grandchildren of a nested group, leaving elements with a
+    // parentId that no longer resolves.
+    const idsToRemove = new Set([el.id, ...getDescendantIds(doc, el.id)]);
     const after = doc.elements.filter(e2=>!idsToRemove.has(e2.id));
     History.execute(state.history, makeReplaceElementsCommand(doc, before, after));
-    state.selection = state.selection.filter(id=>id!==el.id);
+    state.selection = state.selection.filter(id=>!idsToRemove.has(id));
+    if(state.activeGroupId && idsToRemove.has(state.activeGroupId)) state.activeGroupId = null;
     renderAll();
   } else if(btn.classList.contains('btn-up')){
     const after = reorderSibling(doc, el.id, 1);

@@ -5,6 +5,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { JSDOM } from 'jsdom';
 import 'fake-indexeddb/auto';
 
@@ -50,8 +51,10 @@ process.on('unhandledRejection', (err)=>{ bootError = bootError || err; });
 
 for(const script of window.document.querySelectorAll('script[type="module"]')){
   const src = script.getAttribute('src');
-  const modPath = path.join(root, src);
-  await import(modPath.startsWith('/') ? modPath : path.resolve(modPath))
+  // path.join(root, '/js/app/main.js') yields a bare Windows path like
+  // C:\Users\... which the ESM loader rejects; it needs a file:// URL.
+  const modPath = path.resolve(root, '.' + src);
+  await import(pathToFileURL(modPath).href)
     .catch(err=>{ bootError = err; });
 }
 

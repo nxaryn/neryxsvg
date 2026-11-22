@@ -70,15 +70,9 @@ export function wireTopbar(){
     if(v>0) setZoom(v);
   });
 
-  document.getElementById('chkGrid').addEventListener('change', (e)=>{
-    state.gridVisible = e.target.checked;
-    renderView();
-  });
-  document.getElementById('chkSnap').addEventListener('change', (e)=>{ state.snap = e.target.checked; });
-  document.getElementById('gridSizeInput').addEventListener('change', (e)=>{
-    state.document.settings.gridSize = Math.max(0.1, parseFloat(e.target.value)||10);
-    renderView();
-  });
+  // Grid / snap / spacing controls live in the Settings popup and are wired in
+  // ui/CodeEditor.js, which owns the localStorage-backed values and mirrors
+  // them onto `state`. Wiring them here too would double-handle every change.
 
   const btnGroup = document.getElementById('btnGroup');
   const btnUngroup = document.getElementById('btnUngroup');

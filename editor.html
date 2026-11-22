@@ -136,9 +136,9 @@
         <input type="file" id="projectFileInput" class="hidden-file-input" accept=".nsvg,.svg,application/json,image/svg+xml">
         <div class="toast" id="toast"></div>
 
-        <div id="descriptionPopup" class="description-popup">
+        <div id="descriptionPopup" class="description-popup" role="dialog" aria-modal="true" aria-labelledby="descriptionPopupTitle" aria-hidden="true">
             <div class="description-popup-inner">
-                <h3>NeryxSVG — Free Online SVG Editor</h3>
+                <h3 id="descriptionPopupTitle">NeryxSVG — Free Online SVG Editor</h3>
                 <p>Create vector graphics visually, edit SVG source code, fine-tune coordinates, manipulate Bézier paths, and export clean SVG files. No installation required.</p>
                 <p><strong>Tip:</strong> Use the Export button to save your work as SVG or PNG. Select elements first to export only your selection.</p>
                 <div class="description-popup-actions">
@@ -150,12 +150,12 @@
             </div>
         </div>
 
-        <div id="settingsPopup" class="settings-popup">
+        <div id="settingsPopup" class="settings-popup" role="dialog" aria-modal="true" aria-labelledby="settingsPopupTitle" aria-hidden="true">
             <div class="settings-popup-inner">
-                <h3>Settings</h3>
+                <h3 id="settingsPopupTitle">Settings</h3>
                 <div class="settings-section">
                     <h4>Theme</h4>
-                    <select id="selTheme" style="width:100%;padding:4px 8px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;">
+                    <select id="selTheme" style="width:100%;">
                         <option value="dark">Dark</option>
                         <option value="light">Light</option>
                         <option value="midnight">Midnight</option>
@@ -163,21 +163,21 @@
                 </div>
                 <div class="settings-section">
                     <h4>Canvas Background</h4>
-                    <select id="selCanvasBg" style="width:100%;padding:4px 8px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;">
+                    <select id="selCanvasBg" style="width:100%;">
                         <option value="transparent">Transparent</option>
                         <option value="white">White</option>
                         <option value="black">Black</option>
                         <option value="grey">Grey</option>
                         <option value="custom">Custom</option>
                     </select>
-                    <input type="color" id="selCanvasColor" value="#0a0d10" style="width:100%;height:28px;border:none;border-radius:3px;padding:0;cursor:pointer;margin-top:4px;">
+                    <input type="color" id="selCanvasColor" value="#0a0d10" aria-label="Custom canvas colour" style="width:100%;height:28px;border:none;border-radius:3px;padding:0;cursor:pointer;margin-top:4px;">
                 </div>
                 <div class="settings-section">
                     <h4>Grid</h4>
                     <label style="display:flex;align-items:center;gap:6px;">
                         <input type="checkbox" id="chkGrid" checked> Show Grid
                     </label>
-                    <select id="selGridStyle" style="width:100%;padding:4px 8px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;margin-top:4px;">
+                    <select id="selGridStyle" style="width:100%;margin-top:4px;">
                         <option value="squares">Squares</option>
                         <option value="dots">Dots</option>
                         <option value="none">None</option>
@@ -186,7 +186,7 @@
                         <input type="checkbox" id="chkSnap" checked> Snap to Grid
                     </label>
                     <label style="display:flex;align-items:center;gap:6px;margin-top:4px;">
-                        Spacing <input id="gridSizeInput" type="number" value="10" min="1" style="width:60px;padding:2px 4px;border-radius:3px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font-size:12px;">
+                        Spacing <input id="gridSizeInput" type="number" value="10" min="0.1" step="any" style="width:60px;">
                     </label>
                 </div>
                 <div class="settings-section">

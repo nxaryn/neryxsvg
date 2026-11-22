@@ -5,7 +5,7 @@
   "type": "module",
   "description": "NeryxSVG — local-first, browser-native SVG editor. No build step; index.html loads ES modules directly.",
   "scripts": {
-    "test": "node test/boot.mjs && node test/project-roundtrip.mjs && node test/sanitizer.mjs && node test/text-styling.mjs && node test/accessibility.mjs && node test/use-cycle-import.mjs",
+    "test": "node test/boot.mjs && node test/project-roundtrip.mjs && node test/sanitizer.mjs && node test/text-styling.mjs && node test/accessibility.mjs && node test/settings.mjs && node test/use-cycle-import.mjs",
     "test:perf": "node test/performance.mjs"
   },
   "devDependencies": {
