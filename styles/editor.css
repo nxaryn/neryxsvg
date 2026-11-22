@@ -531,6 +531,8 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
   background: var(--panel);
   border-top: 1px solid var(--border);
   transition: flex-basis 140ms ease;
+  position: relative;
+  z-index: 10;
 }
 #bottomPanel.collapsed{ flex-basis: var(--bottompanel-header-h); }
 #bottomPanel.collapsed #codeEditorWrap{ display: none; }
@@ -544,7 +546,9 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
   cursor: pointer;
   user-select: none;
   border-bottom: 1px solid var(--border-soft);
-  background-color: var(--panel);
+  background: var(--panel);
+  position: relative;
+  z-index: 2;
 }
 #codeTabHeader .chev{ color: var(--text-dimmer); font-size: 10px; transition: transform 120ms ease; }
 #bottomPanel.collapsed .chev{ transform: rotate(-90deg); }
