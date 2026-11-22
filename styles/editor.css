@@ -544,7 +544,7 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
   cursor: pointer;
   user-select: none;
   border-bottom: 1px solid var(--border-soft);
-  background: var(--panel);
+  background-color: var(--panel);
 }
 #codeTabHeader .chev{ color: var(--text-dimmer); font-size: 10px; transition: transform 120ms ease; }
 #bottomPanel.collapsed .chev{ transform: rotate(-90deg); }
