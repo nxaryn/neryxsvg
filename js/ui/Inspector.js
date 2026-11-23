@@ -25,10 +25,12 @@ function commit(ids, before, after){
   History.push(state.history, makeSetPropsCommand(doc(), before, after));}
 
 /* --- Google Fonts browsing --- */
+const FONT_LAST_USED_KEY = 'neryxsvg:fonts:lastUsed';
+const MAX_LAST_USED = 8;
+
 const loadedFonts = new Set();
 
-// Curated list of popular Google Fonts (no API key needed for browsing;
-// fonts are loaded on demand via the Google Fonts CSS API).
+// Curated list of popular Google Fonts for browsing.
 const GOOGLE_FONTS = [
   'Roboto','Open Sans','Lato','Montserrat','Oswald','Source Sans Pro','Raleway',
   'PT Sans','Ubuntu','Nunito','Poppins','Playfair Display','Merriweather','Lora',
@@ -45,11 +47,24 @@ const fontStatus = document.getElementById('fontLoadStatus');
 const fontBrowserClose = document.getElementById('fontBrowserClose');
 let fontBrowserTargetId = null;
 
+function getLastUsedFonts(){
+  try{
+    const raw = localStorage.getItem(FONT_LAST_USED_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function addLastUsedFont(family){
+  const list = getLastUsedFonts().filter(f=>f !== family);
+  list.unshift(family);
+  if(list.length > MAX_LAST_USED) list.length = MAX_LAST_USED;
+  try{ localStorage.setItem(FONT_LAST_USED_KEY, JSON.stringify(list)); }catch(e){}
+}
+
 function openFontBrowser(elId){
   fontBrowserTargetId = elId;
   fontSearch.value = '';
   fontStatus.textContent = '';
-  renderFontList(GOOGLE_FONTS);
+  renderFontList();
   fontBrowser.classList.add('show');
   fontBrowser.removeAttribute('aria-hidden');
   fontSearch.focus();
@@ -59,48 +74,109 @@ function closeFontBrowser(){
   fontBrowser.setAttribute('aria-hidden', 'true');
   fontBrowserTargetId = null;
 }
-function renderFontList(fonts){
+
+function renderFontList(){
   fontListEl.innerHTML = '';
-  fonts.forEach(family=>{
-    const item = document.createElement('div');
-    item.className = 'font-item';
-    item.setAttribute('role','option');
-    item.tabIndex = 0;
-    const preview = document.createElement('div');
-    preview.className = 'font-preview';
-    preview.textContent = 'Abc';
-    preview.style.fontFamily = family;
-    const name = document.createElement('div');
-    name.className = 'font-name';
-    name.textContent = family;
-    item.appendChild(preview);
-    item.appendChild(name);
-    item.addEventListener('click', ()=>selectFont(family));
-    item.addEventListener('keydown', (e)=>{
-      if(e.key==='Enter' || e.key===' ') selectFont(family);
+  const q = fontSearch.value.toLowerCase();
+
+  // --- Last Used section ---
+  const lastUsed = getLastUsedFonts().filter(f=>f.toLowerCase().includes(q));
+  if(lastUsed.length){
+    const section = document.createElement('div');
+    section.className = 'font-section';
+    const label = document.createElement('div');
+    label.className = 'font-section-label';
+    label.textContent = 'Last Used';
+    section.appendChild(label);
+    lastUsed.forEach(family=>{
+      section.appendChild(makeFontItem(family));
     });
-    fontListEl.appendChild(item);
+    fontListEl.appendChild(section);
+  }
+
+  // --- Featured section ---
+  const featured = GOOGLE_FONTS.filter(f=>
+    f.toLowerCase().includes(q) && !lastUsed.includes(f)
+  );
+  if(featured.length){
+    const section = document.createElement('div');
+    section.className = 'font-section';
+    const label = document.createElement('div');
+    label.className = 'font-section-label';
+    label.textContent = 'Featured';
+    section.appendChild(label);
+    featured.forEach(family=>{
+      section.appendChild(makeFontItem(family));
+    });
+    fontListEl.appendChild(section);
+  }
+
+  // --- Custom import (any font name) ---
+  if(q && !lastUsed.includes(q) && !GOOGLE_FONTS.some(f=>f.toLowerCase()===q)){
+    const section = document.createElement('div');
+    section.className = 'font-section';
+    const label = document.createElement('div');
+    label.className = 'font-section-label';
+    label.textContent = 'Import custom font';
+    section.appendChild(label);
+    const item = makeFontItem(q, true);
+    item.querySelector('.font-name').textContent = q + ' (custom)';
+    section.appendChild(item);
+    fontListEl.appendChild(section);
+  }
+
+  if(!lastUsed.length && !featured.length && !(q && !GOOGLE_FONTS.some(f=>f.toLowerCase()===q))){
+    const empty = document.createElement('div');
+    empty.className = 'font-empty';
+    empty.textContent = 'No fonts found.';
+    fontListEl.appendChild(empty);
+  }
+}
+
+function makeFontItem(family, isCustom=false){
+  const item = document.createElement('div');
+  item.className = 'font-item' + (isCustom ? ' custom' : '');
+  item.setAttribute('role','option');
+  item.tabIndex = 0;
+  const preview = document.createElement('div');
+  preview.className = 'font-preview';
+  preview.textContent = 'Abc';
+  preview.style.fontFamily = family;
+  const name = document.createElement('div');
+  name.className = 'font-name';
+  name.textContent = family;
+  item.appendChild(preview);
+  item.appendChild(name);
+  item.addEventListener('click', ()=>selectFont(family));
+  item.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' || e.key===' ') selectFont(family);
   });
+  return item;
 }
 function filterFonts(){
-  const q = fontSearch.value.toLowerCase();
-  renderFontList(GOOGLE_FONTS.filter(f=>f.toLowerCase().includes(q)));
+  renderFontList();
 }
+
 function loadFont(family){
   if(loadedFonts.has(family)) return Promise.resolve();
-  const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family.replace(/ /g,'+'))}:wght@400,700&display=swap`;
+  // Google Fonts CSS API: use semicolons between weights.
+  const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}:wght@400;700&display=swap`;
   return new Promise((resolve,reject)=>{
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = url;
     link.onload = ()=>{ loadedFonts.add(family); resolve(); };
-    link.onerror = reject;
+    link.onerror = ()=>reject(new Error(`Failed to load font: ${family}`));
     document.head.appendChild(link);
   });
 }
+
 function selectFont(family){
   if(!fontBrowserTargetId) return;
+  fontStatus.textContent = `Loading ${family}...`;
+  fontStatus.className = 'font-status font-loading';
   loadFont(family).then(()=>{
+    addLastUsedFont(family);
     const el = getElement(doc(), fontBrowserTargetId);
     if(!el) return;
     const before = snapshotElements(doc(), [el.id]);
@@ -113,8 +189,8 @@ function selectFont(family){
     fontStatus.textContent = `Loaded ${family}`;
     fontStatus.className = 'font-status font-loaded';
     closeFontBrowser();
-  }).catch(()=>{
-    fontStatus.textContent = `Failed to load ${family}`;
+  }).catch(err=>{
+    fontStatus.textContent = err.message;
     fontStatus.className = 'font-status font-loading';
   });
 }

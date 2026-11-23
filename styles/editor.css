@@ -970,3 +970,27 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
 .font-loaded{
   color: var(--accent-strong);
 }
+.font-section{
+  margin-bottom: 12px;
+}
+.font-section-label{
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+.font-empty{
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-dimmer);
+  font-size: 12px;
+  padding: 20px 0;
+}
+.font-item.custom .font-name::after{
+  content: ' (custom)';
+  font-size: 9px;
+  color: var(--warn);
+}
