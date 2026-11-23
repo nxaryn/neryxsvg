@@ -22,8 +22,111 @@ function toast(msg){
 }
 
 function commit(ids, before, after){
-  History.push(state.history, makeSetPropsCommand(doc(), before, after));
+  History.push(state.history, makeSetPropsCommand(doc(), before, after));}
+
+/* --- Google Fonts browsing --- */
+const loadedFonts = new Set();
+
+// Curated list of popular Google Fonts (no API key needed for browsing;
+// fonts are loaded on demand via the Google Fonts CSS API).
+const GOOGLE_FONTS = [
+  'Roboto','Open Sans','Lato','Montserrat','Oswald','Source Sans Pro','Raleway',
+  'PT Sans','Ubuntu','Nunito','Poppins','Playfair Display','Merriweather','Lora',
+  'Cormorant Garamond','Libre Baskerville','Crimson Pro','Spectral','Trocchi',
+  'Bitter','Cabin','Fira Sans','Muli','Noto Sans','Quicksand','Varela Round',
+  'Zilla Slab','Karla','Hind','Maven Pop','Work Sans','Inter','Rubik','Manrope',
+  'Barlow','Heebo','Tajawal','Almarai','Cairo','Teko','Rajdhani','Baloo 2'
+];
+
+const fontBrowser = document.getElementById('fontBrowserPopup');
+const fontListEl = document.getElementById('fontList');
+const fontSearch = document.getElementById('fontSearch');
+const fontStatus = document.getElementById('fontLoadStatus');
+const fontBrowserClose = document.getElementById('fontBrowserClose');
+let fontBrowserTargetId = null;
+
+function openFontBrowser(elId){
+  fontBrowserTargetId = elId;
+  fontSearch.value = '';
+  fontStatus.textContent = '';
+  renderFontList(GOOGLE_FONTS);
+  fontBrowser.classList.add('show');
+  fontBrowser.removeAttribute('aria-hidden');
+  fontSearch.focus();
 }
+function closeFontBrowser(){
+  fontBrowser.classList.remove('show');
+  fontBrowser.setAttribute('aria-hidden', 'true');
+  fontBrowserTargetId = null;
+}
+function renderFontList(fonts){
+  fontListEl.innerHTML = '';
+  fonts.forEach(family=>{
+    const item = document.createElement('div');
+    item.className = 'font-item';
+    item.setAttribute('role','option');
+    item.tabIndex = 0;
+    const preview = document.createElement('div');
+    preview.className = 'font-preview';
+    preview.textContent = 'Abc';
+    preview.style.fontFamily = family;
+    const name = document.createElement('div');
+    name.className = 'font-name';
+    name.textContent = family;
+    item.appendChild(preview);
+    item.appendChild(name);
+    item.addEventListener('click', ()=>selectFont(family));
+    item.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' || e.key===' ') selectFont(family);
+    });
+    fontListEl.appendChild(item);
+  });
+}
+function filterFonts(){
+  const q = fontSearch.value.toLowerCase();
+  renderFontList(GOOGLE_FONTS.filter(f=>f.toLowerCase().includes(q)));
+}
+function loadFont(family){
+  if(loadedFonts.has(family)) return Promise.resolve();
+  const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family.replace(/ /g,'+'))}:wght@400,700&display=swap`;
+  return new Promise((resolve,reject)=>{
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = url;
+    link.onload = ()=>{ loadedFonts.add(family); resolve(); };
+    link.onerror = reject;
+    document.head.appendChild(link);
+  });
+}
+function selectFont(family){
+  if(!fontBrowserTargetId) return;
+  loadFont(family).then(()=>{
+    const el = getElement(doc(), fontBrowserTargetId);
+    if(!el) return;
+    const before = snapshotElements(doc(), [el.id]);
+    el.attrs.fontFamily = family;
+    const after = snapshotElements(doc(), [el.id]);
+    commit([el.id], before, after);
+    renderAll();
+    const ffField = document.getElementById('field-fontFamily');
+    if(ffField) ffField.value = family;
+    fontStatus.textContent = `Loaded ${family}`;
+    fontStatus.className = 'font-status font-loaded';
+    closeFontBrowser();
+  }).catch(()=>{
+    fontStatus.textContent = `Failed to load ${family}`;
+    fontStatus.className = 'font-status font-loading';
+  });
+}
+
+fontSearch.addEventListener('input', filterFonts);
+fontBrowserClose.addEventListener('click', closeFontBrowser);
+fontBrowser.addEventListener('click', (e)=>{
+  if(e.target === fontBrowser) closeFontBrowser();
+});
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && fontBrowser.classList.contains('show')) closeFontBrowser();
+});
 
 function field(labelText, id, value, opts){
   opts = opts||{};
@@ -410,7 +513,7 @@ function geometryFields(el){
 
       return `<div class="field-row">${field('X','field-x',round2(el.attrs.x))}${field('Y','field-y',round2(el.attrs.y))}</div>
       <div class="field-row">${field('Font Size','field-fontSize',round2(el.attrs.fontSize))}${field('Letter Spacing','field-letterSpacing',round2(el.attrs.letterSpacing||0),{step:'0.1'})}</div>
-      <div class="field-row single"><div class="field"><label for="field-fontFamily">Font Family</label><input type="text" id="field-fontFamily" value="${escapeAttr(el.attrs.fontFamily||'ui-monospace, monospace')}"></div></div>
+      <div class="field-row single"><div class="field"><label for="field-fontFamily">Font Family</label><div class="color-row" style="display:flex;align-items:center;gap:6px;"><input type="text" id="field-fontFamily" value="${escapeAttr(el.attrs.fontFamily||'ui-monospace, monospace')}" style="flex:1;"><button id="btnBrowseFonts" type="button" style="padding:2px 8px;font-size:11px;">Browse Google Fonts</button></div></div></div>
       <div class="field-row">
         <div class="field"><label for="field-fontWeight">Weight</label>
           <select id="field-fontWeight">
@@ -597,6 +700,8 @@ function wireGeometryFields(el){
         commit([el.id], before, after);
         renderAll();
       });
+      const browseBtn = document.getElementById('btnBrowseFonts');
+      if(browseBtn) browseBtn.addEventListener('click', ()=>openFontBrowser(el.id));
       const bindTextSelect = (id, apply)=>{
         const input = document.getElementById(id);
         if(!input) return;

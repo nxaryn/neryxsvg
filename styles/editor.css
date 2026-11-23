@@ -880,3 +880,93 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
 }
 .btn-primary:hover{ background: var(--accent-dim); border-color: var(--accent-strong); color: var(--accent-strong); }
 .btn-small{ padding: 5px 12px; font-size: 12px; }
+
+/* Font browser popup */
+#fontBrowserPopup{
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 310;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#fontBrowserPopup.show{ display: flex; }
+.font-browser-inner{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  max-width: 560px;
+  width: 100%;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  color: var(--text);
+}
+.font-browser-inner h3{
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: var(--text);
+}
+.font-browser-toolbar{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.font-list{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.font-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: center;
+}
+.font-item:hover{
+  border-color: var(--accent-dim);
+  background: var(--panel);
+}
+.font-item.selected{
+  border-color: var(--accent-dim);
+  background: rgba(79,209,197,0.12);
+}
+.font-preview{
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.font-name{
+  font-size: 11px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.font-status{
+  font-size: 11px;
+  color: var(--text-dimmer);
+  margin-top: 8px;
+  min-height: 14px;
+}
+.font-loading{
+  color: var(--warn);
+}
+.font-loaded{
+  color: var(--accent-strong);
+}
