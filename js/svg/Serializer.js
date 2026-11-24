@@ -99,7 +99,14 @@ export function resolvePageBounds(doc, topLevelEls){
   if(!doc.settings.autoFitViewBox){
     return { x:doc.viewBox.x, y:doc.viewBox.y, w:doc.viewBox.width, h:doc.viewBox.height };
   }
-  return computeContentBounds(doc, topLevelEls);
+  const content = computeContentBounds(doc, topLevelEls);
+  // ViewBox expands to fit content but never shrinks below doc.viewBox.
+  return {
+    x: Math.min(content.x, doc.viewBox.x),
+    y: Math.min(content.y, doc.viewBox.y),
+    w: Math.max(content.w, doc.viewBox.width),
+    h: Math.max(content.h, doc.viewBox.height),
+  };
 }
 
 

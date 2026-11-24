@@ -342,8 +342,8 @@ function importSVGSource(src, keepView){
     if(parts.length===4 && parts.every(n=>isFinite(n))){
       newDoc.viewBox = { x:parts[0], y:parts[1], width:parts[2], height:parts[3] };
       newDoc.width = parts[2]; newDoc.height = parts[3];
-
-      newDoc.settings.autoFitViewBox = false;
+      // Keep autoFitViewBox = true so the viewBox expands to fit content
+      // that is larger than the imported viewBox.
     }
   }
   replaceDocument(newDoc);
