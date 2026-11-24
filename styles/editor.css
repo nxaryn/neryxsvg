@@ -1024,7 +1024,7 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
   border-color: var(--accent-dim);
   color: var(--accent-strong);
 }
-.font-browser-family-name{
+.font-browser-category-name{
   font-size: 16px;
   font-weight: 600;
   color: var(--text);
