@@ -1,7 +1,7 @@
 import { state } from '../app/State.js';
 import { svgRoot, overlayLayer, pathHint } from '../app/dom.js';
 import { Matrix } from '../utils/Matrix.js';
-import { uid } from '../utils/ids.js';
+import { uid, seedCounter } from '../utils/ids.js';
 import {
   createElement, getElement, getChildren, getDescendantIds, getTopLevelAncestor,
   getLocalBounds, getParentSpaceBounds, getParentWorldTransform, getWorldBounds,
@@ -856,6 +856,19 @@ export function newDocument(){
 
 
 
+function reseedUidCounter(doc){
+  let maxId = 0;
+  const idRegex = /^(?:el|grp)(\d+)$/;
+  doc.elements.forEach(el=>{
+    const m = el.id.match(idRegex);
+    if(m){
+      const n = parseInt(m[1], 10);
+      if(n > maxId) maxId = n;
+    }
+  });
+  if(maxId > 0) seedCounter(maxId + 1);
+}
+
 export function replaceDocument(newDoc){
   resetRenderCache();
   resetLayersRenderCache();
@@ -863,6 +876,8 @@ export function replaceDocument(newDoc){
   state.selection = [];
   state.activeGroupId = null;
   state.history = History.createHistory(100);
+  reseedUidCounter(newDoc);
+
 
 
 
