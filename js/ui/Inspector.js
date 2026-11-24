@@ -393,8 +393,8 @@ function renderLeafPanel(el, typeLabel, body){
   html += `<div class="section-title">Transform</div>`;
   html += `<div class="field-row triple">
     ${field('Rotation','field-rotation', round2(el.rotation), {unit:'°'})}
-    <div class="field"><label id="lbl-flipH">Flip H</label><button id="btnFlipHs" class="${el.flipX?'active':''}" aria-labelledby="lbl-flipH" aria-pressed="${el.flipX}">${el.flipX?'On':'Off'}</button></div>
-    <div class="field"><label id="lbl-flipV">Flip V</label><button id="btnFlipVs" class="${el.flipY?'active':''}" aria-labelledby="lbl-flipV" aria-pressed="${el.flipY}">${el.flipY?'On':'Off'}</button></div>
+    <div class="field"><label id="lbl-flipH">Flip H</label><button id="btnFlipHs" class="${el.flipX?'active':''}" aria-labelledby="lbl-flipH" aria-pressed="${el.flipX === true}">${el.flipX?'On':'Off'}</button></div>
+    <div class="field"><label id="lbl-flipV">Flip V</label><button id="btnFlipVs" class="${el.flipY?'active':''}" aria-labelledby="lbl-flipV" aria-pressed="${el.flipY === true}">${el.flipY?'On':'Off'}</button></div>
   </div>`;
   html += `<div class="btn-row">
     <button id="btnRotL">−90°</button><button id="btnRotR">+90°</button><button id="btnRotReset">Reset</button>
