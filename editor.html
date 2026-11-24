@@ -146,12 +146,21 @@
 
         <div id="fontBrowserPopup" class="font-browser-popup" role="dialog" aria-modal="true" aria-labelledby="fontBrowserTitle" aria-hidden="true">
             <div class="font-browser-inner">
-                <h3 id="fontBrowserTitle">Google Fonts</h3>
-                <div class="font-browser-toolbar">
-                    <input type="text" id="fontSearch" placeholder="Search fonts..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--panel-2);color:var(--text);font-size:12px;">
-                    <button id="fontBrowserClose" class="btn btn-primary btn-small" style="margin-top:8px;">Close</button>
+                <div id="fontBrowserHeader" class="font-browser-header" style="display:none;">
+                    <button id="fontBrowserBack" class="font-browser-back" type="button">←</button>
+                    <span id="fontBrowserFamilyName" class="font-browser-family-name"></span>
                 </div>
-                <div id="fontList" class="font-list"></div>
+                <div id="fontBrowserFamilyView" class="font-browser-view">
+                    <h3 id="fontBrowserTitle">Google Fonts</h3>
+                    <div class="font-browser-toolbar">
+                        <input type="text" id="fontSearch" placeholder="Search fonts..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--panel-2);color:var(--text);font-size:12px;">
+                        <button id="fontBrowserClose" class="btn btn-primary btn-small" style="margin-top:8px;">Close</button>
+                    </div>
+                    <div id="fontList" class="font-list"></div>
+                </div>
+                <div id="fontBrowserTypeView" class="font-browser-view" style="display:none;">
+                    <div id="fontTypeList" class="font-list"></div>
+                </div>
                 <div id="fontLoadStatus" class="font-status" style="font-size:11px;color:var(--text-dimmer);margin-top:8px;"></div>
             </div>
         </div>

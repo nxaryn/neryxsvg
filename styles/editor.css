@@ -996,3 +996,45 @@ body.theme-midnight #canvasScroll.bg-transparent{ --checker-tile: #0b1220; }
   font-size: 9px;
   color: var(--warn);
 }
+.font-browser-header{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 0 16px 0;
+  margin-left: 4rem;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 12px;
+}
+.font-browser-back{
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.font-browser-back:hover{
+  background: var(--panel-2);
+  border-color: var(--accent-dim);
+  color: var(--accent-strong);
+}
+.font-browser-family-name{
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+.font-browser-view{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
